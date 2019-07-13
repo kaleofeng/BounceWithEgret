@@ -7,11 +7,11 @@ class Box {
     private skin: egret.Sprite;
 
     constructor(options: any) {
-        const position: number[] = options.position || [0, 0];
-        const dimension: number[] = options.dimension || [100, 100];
-        const mass: number = options.mass || 1;
-        const color: number = options.color || 0xFF0000;
-        const alpha: number = options.alpha || 1;
+        const position: number[] = options.position !== undefined ? options.position : [0, 0];
+        const dimension: number[] = options.dimension !== undefined ? options.dimension : [100, 100];
+        const mass: number = options.mass !== undefined ? options.mass : 1;
+        const color: number = options.color !== undefined ? options.color : 0xFF0000;
+        const alpha: number = options.alpha !== undefined ? options.alpha : 1;
 
         this.createMaterial();
         this.createShape(dimension);

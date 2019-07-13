@@ -7,11 +7,11 @@ class Ball {
     private skin: egret.Sprite;
 
     constructor(options: any) {
-        const position: number[] = options.position || [0, 0];
-        const radius: number = options.radius || 20;
-        const mass: number = options.mass || 1;
-        const color: number = options.color || 0x0000FF;
-        const alpha: number = options.alpha || 1;
+        const position: number[] = options.position !== undefined ? options.position : [0, 0];
+        const radius: number = options.radius !== undefined ? options.radius : 20;
+        const mass: number = options.mass !== undefined ? options.mass : 1;
+        const color: number = options.color !== undefined ? options.color : 0x0000FF;
+        const alpha: number = options.alpha !== undefined ? options.alpha : 1;
 
         this.createMaterial();
         this.createShape(radius);

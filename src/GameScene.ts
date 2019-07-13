@@ -76,7 +76,10 @@ class GameScene extends egret.DisplayObjectContainer {
         };
 
         this.ball = new Ball(options);
-        this.addChild(this.ball.theSkin());
         this.physicsWorld.theWorld().addBody(this.ball.theBody());
+        this.addChild(this.ball.theSkin());
+
+        this.ball.theBody().mass = 0;
+        this.ball.theBody().applyImpulse([0 , 1000], [0, 0]);
     }
 }
