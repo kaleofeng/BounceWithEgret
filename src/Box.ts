@@ -36,7 +36,7 @@ class Box {
     }
 
     private createMaterial() {
-        this.material = new p2.Material(Constant.BOX_MATERIAL);
+        this.material = new p2.Material(Constant.GROUND_MATERIAL);
     }
 
     private createShape(dimension: number[]) {

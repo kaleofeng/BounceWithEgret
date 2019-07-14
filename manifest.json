@@ -9,10 +9,12 @@
 		"libs/physics/physics.js"
 	],
 	"game": [
-		"bin-debug/Ball.js",
-		"bin-debug/Box.js",
-		"bin-debug/Constant.js",
+		"bin-debug/Brick.js",
 		"bin-debug/GameScene.js",
+		"bin-debug/BoxBrick.js",
+		"bin-debug/Ball.js",
+		"bin-debug/Constant.js",
+		"bin-debug/Box.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/p2DebugDraw.js",

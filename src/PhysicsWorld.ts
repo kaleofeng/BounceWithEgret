@@ -10,10 +10,14 @@ class PhysicsWorld {
     }
 
     public setup() {
-        const m1 = new p2.Material(Constant.BOX_MATERIAL);
-        const m2 = new p2.Material(Constant.BALL_MATERIAL);
-        const m1_2 = new p2.ContactMaterial(m1, m2, <p2.ContactMaterialOptions>{restitution: 0.7, friction: 0});
-        this.world.addContactMaterial(m1_2);
+        const m1 = new p2.Material(Constant.BALL_MATERIAL);
+        const m2 = new p2.Material(Constant.BRICK_MATERIAL);
+        const cm12 = new p2.ContactMaterial(m1, m2, <p2.ContactMaterialOptions>{restitution: 0.7, friction: 0});
+        this.world.addContactMaterial(cm12);
+
+        const m3 = new p2.Material(Constant.GROUND_MATERIAL);
+        const cm13 = new p2.ContactMaterial(m1, m3, <p2.ContactMaterialOptions>{restitution: 0, friction: 0});
+        this.world.addContactMaterial(cm13);
     }
 
     public tick(dt: number) {

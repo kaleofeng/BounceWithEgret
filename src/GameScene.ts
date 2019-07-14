@@ -5,6 +5,7 @@ class GameScene extends egret.DisplayObjectContainer {
     private p2DebugDraw: p2DebugDraw;
 
     private ground: Box;
+    private brick: Brick;
     private ball: Ball;
 
     private lastTime: number;
@@ -26,6 +27,7 @@ class GameScene extends egret.DisplayObjectContainer {
         this.physicsWorld.setup();
         this.createBackground();
         this.createGround();
+        this.createBrick();
         this.createBall();
 
         // const debugSprite = new egret.Sprite();
@@ -65,21 +67,31 @@ class GameScene extends egret.DisplayObjectContainer {
         };
 
         this.ground = new Box(options);
-        this.addChild(this.ground.theSkin());
         this.physicsWorld.theWorld().addBody(this.ground.theBody());
+        this.addChild(this.ground.theSkin());
+    }
+
+    private createBrick() {
+        const options = {
+            position: [this.stage.stageWidth / 2, this.stage.stageHeight - 200],
+            dimension: [40, 40]
+        };
+
+        this.brick = new BoxBrick(options);
+        this.physicsWorld.theWorld().addBody(this.brick.theBody());
+        this.addChild(this.brick);
     }
 
     private createBall() {
         const options = {
-            position: [this.stage.stageWidth / 2, 0],
+            position: [this.stage.stageWidth / 2 + 50, this.stage.stageHeight - 200],
             radius: 20
         };
 
         this.ball = new Ball(options);
         this.physicsWorld.theWorld().addBody(this.ball.theBody());
-        this.addChild(this.ball.theSkin());
+        this.addChild(this.ball);
 
-        this.ball.theBody().mass = 0;
-        this.ball.theBody().applyImpulse([0 , 1000], [0, 0]);
+        //this.ball.theBody().applyImpulse([0 , 1000], [0, 0]);
     }
 }
