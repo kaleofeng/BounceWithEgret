@@ -60,7 +60,7 @@ class Ball extends egret.Sprite {
         this.anchorOffsetX = radius;
         this.anchorOffsetY = radius;
         this.graphics.lineStyle(Constant.BORDER_THICKNESS, 0x00FF00);
-        this.graphics.beginFill(color, 1);
+        this.graphics.beginFill(color, alpha);
         this.graphics.drawCircle(this.anchorOffsetX, this.anchorOffsetY, radius - radiusBorder);
         this.graphics.endFill();
         this.body.displays = [this];

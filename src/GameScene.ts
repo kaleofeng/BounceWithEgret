@@ -54,7 +54,7 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private createBackground() {
         const bg: egret.Sprite = new egret.Sprite();
-        bg.graphics.beginFill(0xFFFFFF, 1);
+        bg.graphics.beginFill(0x888888, 1);
         bg.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
         bg.graphics.endFill();
         this.addChild(bg);
@@ -74,7 +74,8 @@ class GameScene extends egret.DisplayObjectContainer {
     private createBrick() {
         const options = {
             position: [this.stage.stageWidth / 2, this.stage.stageHeight - 200],
-            dimension: [40, 40]
+            dimension: [60, 60],
+            alpha: 0
         };
 
         this.brick = new BoxBrick(options);
@@ -84,8 +85,9 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private createBall() {
         const options = {
-            position: [this.stage.stageWidth / 2 + 50, this.stage.stageHeight - 200],
-            radius: 20
+            position: [this.stage.stageWidth / 2 + 100, this.stage.stageHeight - 200],
+            radius: 30,
+            alpha: 0
         };
 
         this.ball = new Ball(options);
