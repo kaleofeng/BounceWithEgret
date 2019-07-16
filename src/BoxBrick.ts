@@ -6,7 +6,7 @@ class BoxBrick extends Brick {
     }
 
     protected createShape() {
-        const dimension: number[] = this.getOptionDimension();
+        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
 
         this.shape = new p2.Box({width: dimension[0], height: dimension[1]})
         this.shape.material = this.material;
@@ -14,9 +14,9 @@ class BoxBrick extends Brick {
     }
 
     protected createDisplay() {
-        const dimension: number[] = this.getOptionDimension();
-        const color: number = this.getOptionColor();
-        const alpha: number = this.getOptionAlpha();
+        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+        const color: number = OptionHelper.getOptionColor(this.options);
+        const alpha: number = OptionHelper.getOptionAlpha(this.options);
 
         const thickness: number = Constant.BORDER_THICKNESS;
         const x: number = Constant.BORDER_THICKNESS / 2;
@@ -31,17 +31,5 @@ class BoxBrick extends Brick {
         this.graphics.drawRect(x, y, width, height);
         this.graphics.endFill();
         this.body.displays = [this];
-    }
-
-    private getOptionDimension(): number[] {
-        return this.options.dimension !== undefined ? this.options.dimension : [100, 100];
-    }
-    
-    private getOptionColor(): number {
-        return this.options.color !== undefined ? this.options.color : 0x000000;
-    }
-    
-    private getOptionAlpha(): number {
-        return this.options.alpha !== undefined ? this.options.alpha : 1;
     }
 }

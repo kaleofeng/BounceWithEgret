@@ -5,7 +5,7 @@ class Brick extends egret.Sprite {
 
     protected material: p2.Material;
     protected body: p2.Body;
-    protected shape: p2.Box;
+    protected shape: p2.Shape;
     protected textField : egret.TextField;
 
     protected number: number = 0;
@@ -28,7 +28,7 @@ class Brick extends egret.Sprite {
         return this.material;
     }
 
-    public theShape(): p2.Box {
+    public theShape(): p2.Shape {
         return this.shape;
     }
 
@@ -49,8 +49,8 @@ class Brick extends egret.Sprite {
     }
 
     protected createBody() {
-        const position: number[] = this.getOptionPosition();
-        const mass: number = this.getOptionMass();
+        const position: number[] = OptionHelper.getOptionPosition(this.options);
+        const mass: number = OptionHelper.getOptionMass(this.options);
     
         this.body = new p2.Body({position: position, mass: mass});
         this.body.type = p2.Body.DYNAMIC;
@@ -80,13 +80,5 @@ class Brick extends egret.Sprite {
         this.textField.x = this.width / 2;
         this.textField.y = this.height / 2;
         this.addChild(this.textField);
-    }
-
-    private getOptionPosition(): number[] {
-        return this.options.position !== undefined ? this.options.position : [0, 0];
-    }
-    
-    private getOptionMass(): number {
-        return this.options.mass !== undefined ? this.options.mass : 1;
     }
 }

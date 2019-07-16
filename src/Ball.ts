@@ -15,16 +15,10 @@ class Ball extends egret.Sprite {
     }
 
     public setup() {
-        const position: number[] = this.options.position !== undefined ? this.options.position : [0, 0];
-        const radius: number = this.options.radius !== undefined ? this.options.radius : 20;
-        const mass: number = this.options.mass !== undefined ? this.options.mass : 1;
-        const color: number = this.options.color !== undefined ? this.options.color : 0x0000FF;
-        const alpha: number = this.options.alpha !== undefined ? this.options.alpha : 1;
-
         this.createMaterial();
-        this.createBody(position, mass);
-        this.createShape(radius);
-        this.createDisplay(radius, color, alpha);
+        this.createBody();
+        this.createShape();
+        this.createDisplay();
     }
 
     public theMaterial(): p2.Material {
@@ -43,25 +37,31 @@ class Ball extends egret.Sprite {
         this.material = new p2.Material(Constant.BALL_MATERIAL);
     }
 
-    private createBody(position: number[], mass: number) {
+    private createBody() {
+        const position: number[] = OptionHelper.getOptionPosition(this.options);
+        const mass: number = OptionHelper.getOptionMass(this.options);
+
         this.body = new p2.Body({position: position, mass: mass});
         this.body.type = p2.Body.DYNAMIC;
     }
 
-    private createShape(radius: number) {
+    private createShape() {
+        const radius: number = OptionHelper.getOptionRadius(this.options);
+
         this.shape = new p2.Circle({radius: radius});
         this.shape.material = this.material;
         this.body.addShape(this.shape);
     }
 
-    private createDisplay(radius: number, color: number, alpha: number) {
-        const radiusBorder: number = Constant.BORDER_THICKNESS / 2;
+    private createDisplay() {
+        const radius: number = OptionHelper.getOptionRadius(this.options);
+        const color: number = OptionHelper.getOptionColor(this.options);
+        const alpha: number = OptionHelper.getOptionAlpha(this.options);
 
         this.anchorOffsetX = radius;
         this.anchorOffsetY = radius;
-        this.graphics.lineStyle(Constant.BORDER_THICKNESS, 0x00FF00);
         this.graphics.beginFill(color, alpha);
-        this.graphics.drawCircle(this.anchorOffsetX, this.anchorOffsetY, radius - radiusBorder);
+        this.graphics.drawCircle(this.anchorOffsetX, this.anchorOffsetY, radius);
         this.graphics.endFill();
         this.body.displays = [this];
     }

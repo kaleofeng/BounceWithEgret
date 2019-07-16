@@ -5,7 +5,8 @@ class GameScene extends egret.DisplayObjectContainer {
     private p2DebugDraw: p2DebugDraw;
 
     private ground: Box;
-    private brick: Brick;
+    private boxBrick: Brick;
+    private circleBrick: Brick;
     private ball: Ball;
 
     private lastTime: number;
@@ -27,7 +28,8 @@ class GameScene extends egret.DisplayObjectContainer {
         this.physicsWorld.setup();
         this.createBackground();
         this.createGround();
-        this.createBrick();
+        this.createBoxBrick();
+        this.createCircleBrick();
         this.createBall();
 
         // const debugSprite = new egret.Sprite();
@@ -71,23 +73,35 @@ class GameScene extends egret.DisplayObjectContainer {
         this.addChild(this.ground.theSkin());
     }
 
-    private createBrick() {
+    private createBoxBrick() {
         const options = {
             position: [this.stage.stageWidth / 2, this.stage.stageHeight - 200],
             dimension: [60, 60],
             alpha: 0
         };
 
-        this.brick = new BoxBrick(options);
-        this.physicsWorld.theWorld().addBody(this.brick.theBody());
-        this.addChild(this.brick);
+        this.boxBrick = new BoxBrick(options);
+        this.physicsWorld.theWorld().addBody(this.boxBrick.theBody());
+        this.addChild(this.boxBrick);
+    }
+
+    private createCircleBrick() {
+        const options = {
+            position: [this.stage.stageWidth / 2 - 100, this.stage.stageHeight - 200],
+            radius: 30,
+            alpha: 0
+        };
+
+        this.circleBrick = new CircleBrick(options);
+        this.physicsWorld.theWorld().addBody(this.circleBrick.theBody());
+        this.addChild(this.circleBrick);
     }
 
     private createBall() {
         const options = {
             position: [this.stage.stageWidth / 2 + 100, this.stage.stageHeight - 200],
             radius: 30,
-            alpha: 0
+            alpha: 1
         };
 
         this.ball = new Ball(options);

@@ -13,6 +13,7 @@
 		"bin-debug/GameScene.js",
 		"bin-debug/BoxBrick.js",
 		"bin-debug/Ball.js",
+		"bin-debug/CircleBrick.js",
 		"bin-debug/Constant.js",
 		"bin-debug/Box.js",
 		"bin-debug/LoadingUI.js",
