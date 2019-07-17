@@ -18,6 +18,8 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private onAddToStage(event: egret.Event) {
         this.setup();
+        this.touchEnabled = true;
+        this.addEventListener( egret.TouchEvent.TOUCH_TAP, this.onTouch, this );
     }
 
     private setup() {
@@ -30,13 +32,16 @@ class GameScene extends egret.DisplayObjectContainer {
         this.createGround();
         this.createBoxBrick();
         this.createCircleBrick();
-        this.createBall();
 
         // const debugSprite = new egret.Sprite();
         // this.addChild(debugSprite);
         // this.p2DebugDraw.setSprite(debugSprite);
 
         egret.startTick(this.tick, this);
+    }
+
+    private onTouch(evt: egret.TouchEvent) {
+        this.createBall(evt.stageX, evt.stageY);
     }
 
     private tick(timestamp: number): boolean {
@@ -97,11 +102,10 @@ class GameScene extends egret.DisplayObjectContainer {
         this.addChild(this.circleBrick);
     }
 
-    private createBall() {
+    private createBall(x: number, y: number) {
         const options = {
-            position: [this.stage.stageWidth / 2 + 100, this.stage.stageHeight - 200],
-            radius: 30,
-            alpha: 1
+            position: [x, y],
+            mass: 1,
         };
 
         this.ball = new Ball(options);

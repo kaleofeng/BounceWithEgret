@@ -18,6 +18,7 @@
 		"bin-debug/Box.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
+		"bin-debug/OptionHelper.js",
 		"bin-debug/p2DebugDraw.js",
 		"bin-debug/PhysicsWorld.js",
 		"bin-debug/Platform.js"

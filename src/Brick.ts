@@ -17,15 +17,10 @@ class Brick extends egret.Sprite {
     }
 
     public setup() {
-        this.createMaterial();
         this.createBody();
-        this.createShape();
         this.createDisplay();
+        this.createShape();
         this.createText();
-    }
-
-    public theMaterial(): p2.Material {
-        return this.material;
     }
 
     public theShape(): p2.Shape {
@@ -44,10 +39,6 @@ class Brick extends egret.Sprite {
         this.number = number;
     }
 
-    protected createMaterial() {
-        this.material = new p2.Material(Constant.BRICK_MATERIAL);
-    }
-
     protected createBody() {
         const position: number[] = OptionHelper.getOptionPosition(this.options);
         const mass: number = OptionHelper.getOptionMass(this.options);
@@ -56,12 +47,12 @@ class Brick extends egret.Sprite {
         this.body.type = p2.Body.DYNAMIC;
     }
 
-    protected createShape() {
-
-    }
-
     protected createDisplay() {
        
+    }
+
+    protected createShape() {
+
     }
 
     protected createText() {

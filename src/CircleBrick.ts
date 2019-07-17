@@ -5,14 +5,6 @@ class CircleBrick extends Brick {
         super(options);
     }
 
-    protected createShape() {
-        const radius: number = OptionHelper.getOptionRadius(this.options);
-
-        this.shape = new p2.Circle({radius: radius});
-        this.shape.material = this.material;
-        this.body.addShape(this.shape);
-    }
-
     protected createDisplay() {
         const radius: number = OptionHelper.getOptionRadius(this.options);
         const color: number = OptionHelper.getOptionColor(this.options);
@@ -27,5 +19,13 @@ class CircleBrick extends Brick {
         this.graphics.drawCircle(this.anchorOffsetX, this.anchorOffsetY, radius - radiusBorder);
         this.graphics.endFill();
         this.body.displays = [this];
+    }
+    
+    protected createShape() {
+        const radius: number = OptionHelper.getOptionRadius(this.options);
+
+        this.shape = new p2.Circle({radius: radius});
+        this.shape.material = new p2.Material(Constant.BRICK_MATERIAL);;
+        this.body.addShape(this.shape);
     }
 }

@@ -5,14 +5,6 @@ class BoxBrick extends Brick {
         super(options);
     }
 
-    protected createShape() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
-
-        this.shape = new p2.Box({width: dimension[0], height: dimension[1]})
-        this.shape.material = this.material;
-        this.body.addShape(this.shape);
-    }
-
     protected createDisplay() {
         const dimension: number[] = OptionHelper.getOptionDimension(this.options);
         const color: number = OptionHelper.getOptionColor(this.options);
@@ -31,5 +23,13 @@ class BoxBrick extends Brick {
         this.graphics.drawRect(x, y, width, height);
         this.graphics.endFill();
         this.body.displays = [this];
+    }
+    
+    protected createShape() {
+        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+
+        this.shape = new p2.Box({width: dimension[0], height: dimension[1]})
+        this.shape.material = new p2.Material(Constant.BRICK_MATERIAL);;
+        this.body.addShape(this.shape);
     }
 }
