@@ -47,6 +47,7 @@ class Box {
     private createBody(position: number[], mass: number) {
         this.body = new p2.Body({position: position, mass: mass});
         this.body.type = p2.Body.STATIC;
+        this.body.id = Constant.GROUND_ID;
         this.body.addShape(this.shape);
     }
 

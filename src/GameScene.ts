@@ -47,7 +47,7 @@ class GameScene extends egret.DisplayObjectContainer {
     private tick(timestamp: number): boolean {
         const interval = timestamp - this.lastTime;
         this.lastTime = timestamp;
-        console.log(timestamp, this.lastTime, interval);
+        //console.log(timestamp, this.lastTime, interval);
 
         this.physicsWorld.tick(interval / 1000);
         const bodies = this.physicsWorld.theWorld().bodies;
@@ -105,13 +105,13 @@ class GameScene extends egret.DisplayObjectContainer {
     private createBall(x: number, y: number) {
         const options = {
             position: [x, y],
-            mass: 1,
         };
 
         this.ball = new Ball(options);
         this.physicsWorld.theWorld().addBody(this.ball.theBody());
         this.addChild(this.ball);
 
-        //this.ball.theBody().applyImpulse([0 , 1000], [0, 0]);
+        this.ball.theBody().mass = 0;
+        this.ball.theBody().applyImpulse([0 , 1000], [0, 0]);
     }
 }

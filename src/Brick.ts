@@ -48,11 +48,11 @@ class Brick extends egret.Sprite {
     }
 
     protected createDisplay() {
-       
+    
     }
 
     protected createShape() {
-
+    
     }
 
     protected createText() {
