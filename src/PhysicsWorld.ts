@@ -35,6 +35,27 @@ class PhysicsWorld {
     }
 
     private onBeginContact(evt: any) {
-        console.log(evt.bodyA.id, evt.bodyB.id);
+        const bodyA: p2.Body = evt.bodyA;
+        const bodyB: p2.Body = evt.bodyB;
+        const body1 = bodyA.userData.role <= bodyB.userData.role ? bodyA : bodyB;
+        const body2 = bodyA.userData.role <= bodyB.userData.role ? bodyB : bodyA;
+        const role1 = body1.userData;
+        const role2 = body2.userData;
+        
+        if (role1.role == ERole.BALL) {
+            const ball: Ball = <Ball>role1;
+            ball.theBody().mass = 1;
+
+            switch (role2.role) {
+                case ERole.BALL:
+                    const another: Ball = <Ball>role1;
+                    this.onBallHit(ball, another);
+                    break
+            }
+        }
+    }
+
+    private onBallHit(self: Ball, another: Ball) {
+
     }
 }

@@ -2,6 +2,7 @@
 class Ball extends egret.Bitmap {
 
     private options: any;
+    private role: ERole;
 
     private body: p2.Body;
     private shape: p2.Circle;
@@ -10,6 +11,7 @@ class Ball extends egret.Bitmap {
         super();
 
         this.options = options;
+        this.role = ERole.BALL;
         this.setup();
     }
 
@@ -33,6 +35,7 @@ class Ball extends egret.Bitmap {
 
         this.body = new p2.Body({position: position, mass: mass});
         this.body.type = p2.Body.DYNAMIC;
+        this.body.userData = this;
     }
 
     private createDisplay() {

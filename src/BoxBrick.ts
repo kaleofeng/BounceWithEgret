@@ -18,7 +18,7 @@ class BoxBrick extends Brick {
 
         this.anchorOffsetX = dimension[0] / 2;
         this.anchorOffsetY = dimension[1] / 2;
-        this.graphics.lineStyle(thickness, 0x00FF00);
+        this.graphics.lineStyle(thickness, 0x0000FF);
         this.graphics.beginFill(color, alpha);
         this.graphics.drawRect(x, y, width, height);
         this.graphics.endFill();

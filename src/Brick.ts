@@ -2,6 +2,7 @@
 class Brick extends egret.Sprite {
 
     protected options: any;
+    protected role: ERole;
 
     protected material: p2.Material;
     protected body: p2.Body;
@@ -13,6 +14,7 @@ class Brick extends egret.Sprite {
     constructor(options: any) {
         super();
         this.options = options;
+        this.role = ERole.BRICK;
         this.setup();
     }
 
@@ -45,6 +47,7 @@ class Brick extends egret.Sprite {
     
         this.body = new p2.Body({position: position, mass: mass});
         this.body.type = p2.Body.DYNAMIC;
+        this.body.userData = this;
     }
 
     protected createDisplay() {

@@ -4,7 +4,7 @@ class GameScene extends egret.DisplayObjectContainer {
     private physicsWorld: PhysicsWorld;
     private p2DebugDraw: p2DebugDraw;
 
-    private ground: Box;
+    private ground: Ground;
     private boxBrick: Brick;
     private circleBrick: Brick;
     private ball: Ball;
@@ -42,6 +42,15 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private onTouch(evt: egret.TouchEvent) {
         this.createBall(evt.stageX, evt.stageY);
+
+        console.log(Math.atan2(30, 30) * 180 / Math.PI);
+        console.log(Math.atan2(30, -30) * 180 / Math.PI);
+        console.log(Math.atan2(-30, -30) * 180 / Math.PI);
+        console.log(Math.atan2(-30, 30) * 180 / Math.PI);
+        console.log(Math.sin(30/180));
+        console.log(Math.sin(150/180));
+        console.log(Math.sin(-150/180));
+        console.log(Math.sin(-30/180));
     }
 
     private tick(timestamp: number): boolean {
@@ -70,18 +79,21 @@ class GameScene extends egret.DisplayObjectContainer {
     private createGround() {
         const options = {
             position: [this.stage.stageWidth / 2, this.stage.stageHeight - 100 / 2],
-            dimension: [this.stage.stageWidth, 100]
+            dimension: [this.stage.stageWidth, 100],
+            color: 0xFF0000,
+            alpha: 1
         };
 
-        this.ground = new Box(options);
+        this.ground = new Ground(options);
         this.physicsWorld.theWorld().addBody(this.ground.theBody());
-        this.addChild(this.ground.theSkin());
+        this.addChild(this.ground);
     }
 
     private createBoxBrick() {
         const options = {
             position: [this.stage.stageWidth / 2, this.stage.stageHeight - 200],
             dimension: [60, 60],
+            color: 0x00FF00,
             alpha: 0
         };
 
@@ -94,6 +106,7 @@ class GameScene extends egret.DisplayObjectContainer {
         const options = {
             position: [this.stage.stageWidth / 2 - 100, this.stage.stageHeight - 200],
             radius: 30,
+            color: 0x00FF00,
             alpha: 0
         };
 
@@ -104,7 +117,7 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private createBall(x: number, y: number) {
         const options = {
-            position: [x, y],
+            position: [x, y]
         };
 
         this.ball = new Ball(options);

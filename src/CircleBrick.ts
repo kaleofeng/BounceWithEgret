@@ -14,7 +14,7 @@ class CircleBrick extends Brick {
 
         this.anchorOffsetX = radius;
         this.anchorOffsetY = radius;
-        this.graphics.lineStyle(Constant.BORDER_THICKNESS, 0x00FF00);
+        this.graphics.lineStyle(Constant.BORDER_THICKNESS, 0x0000FF);
         this.graphics.beginFill(color, alpha);
         this.graphics.drawCircle(this.anchorOffsetX, this.anchorOffsetY, radius - radiusBorder);
         this.graphics.endFill();
