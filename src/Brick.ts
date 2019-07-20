@@ -39,6 +39,7 @@ class Brick extends egret.Sprite {
 
     public setNumber(number: number) {
         this.number = number;
+        this.textField.text = this.number.toString(10);
     }
 
     protected createBody() {
@@ -46,7 +47,7 @@ class Brick extends egret.Sprite {
         const mass: number = OptionHelper.getOptionMass(this.options);
     
         this.body = new p2.Body({position: position, mass: mass});
-        this.body.type = p2.Body.DYNAMIC;
+        this.body.type = p2.Body.STATIC;
         this.body.userData = this;
     }
 

@@ -25,7 +25,9 @@ class CircleBrick extends Brick {
         const radius: number = OptionHelper.getOptionRadius(this.options);
 
         this.shape = new p2.Circle({radius: radius});
-        this.shape.material = new p2.Material(Constant.BRICK_MATERIAL);;
+        this.shape.material = new p2.Material(Constant.BRICK_MATERIAL);
+        this.shape.collisionGroup = Constant.BRICK_COLLISION_GROUP;
+        this.shape.collisionMask = Constant.BALL_COLLISION_GROUP;
         this.body.addShape(this.shape);
     }
 }

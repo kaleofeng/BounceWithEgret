@@ -805,6 +805,11 @@ declare module p2 {
         displays: egret.DisplayObject[];
 
         /**
+         * 用户数据
+         */
+        userData: any;
+
+        /**
          * 设置刚体总密度
          * @method setDensity
          */

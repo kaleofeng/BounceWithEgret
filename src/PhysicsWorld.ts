@@ -10,20 +10,21 @@ class PhysicsWorld {
     }
 
     public setup() {
-        const m1 = new p2.Material(Constant.BALL_MATERIAL);
-        const m2 = new p2.Material(Constant.BRICK_MATERIAL);
-        const m3 = new p2.Material(Constant.GROUND_MATERIAL);
+        const mA = new p2.Material(Constant.BALL_MATERIAL);
+        const mR = new p2.Material(Constant.BRICK_MATERIAL);
+        const mW = new p2.Material(Constant.WALL_MATERIAL);
+        const mG = new p2.Material(Constant.GROUND_MATERIAL);
 
-        const cm11 = new p2.ContactMaterial(m1, m1, <p2.ContactMaterialOptions>{restitution: 0.7, friction: 0});
-        this.world.addContactMaterial(cm11);
+        const cmAR = new p2.ContactMaterial(mA, mR, <p2.ContactMaterialOptions>{restitution: 1, friction: 0});
+        this.world.addContactMaterial(cmAR);
 
-        const cm12 = new p2.ContactMaterial(m1, m2, <p2.ContactMaterialOptions>{restitution: 0.7, friction: 0});
-        this.world.addContactMaterial(cm12);
+        const cmAW = new p2.ContactMaterial(mA, mW, <p2.ContactMaterialOptions>{restitution: 1, friction: 0});
+        this.world.addContactMaterial(cmAW);
 
-        const cm13 = new p2.ContactMaterial(m1, m3, <p2.ContactMaterialOptions>{restitution: 0, friction: 0});
-        this.world.addContactMaterial(cm13);
+        const cmAG = new p2.ContactMaterial(mA, mG, <p2.ContactMaterialOptions>{restitution: 0, friction: 0});
+        this.world.addContactMaterial(cmAG);
 
-        this.world.on("beginContact", this.onBeginContact);
+        this.world.on("beginContact", this.onBeginContact.bind(this));
     }
 
     public tick(dt: number) {
@@ -44,18 +45,38 @@ class PhysicsWorld {
         
         if (role1.role == ERole.BALL) {
             const ball: Ball = <Ball>role1;
-            ball.theBody().mass = 1;
+            if (ball.theBody().mass == 0) {
+                ball.theBody().mass = 200;
+                let impulse: number[] = [ball.theBody().velocity[0], ball.theBody().velocity[1]];
+
+                console.log("accelerate", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
+            }
 
             switch (role2.role) {
-                case ERole.BALL:
-                    const another: Ball = <Ball>role1;
-                    this.onBallHit(ball, another);
+                case ERole.BRICK:
+                    this.onBallHitBrick(ball, <Brick>role2);
                     break
+                case ERole.WALL:
+                    this.onBallHitWall(ball, <Wall>role2);
+                    break
+                case ERole.GROUND:
+                    this.onBallHitGround(ball, <Ground>role2);
+                    break
+                default:
+                    console.log("Ball hit unknown role", role2.role);
             }
         }
     }
 
-    private onBallHit(self: Ball, another: Ball) {
-
+    private onBallHitBrick(ball: Ball, brick: Brick) {
+        console.log("hit brick", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
+    }
+    
+    private onBallHitWall(ball: Ball, wall: Wall) {
+        //console.log("hit wall", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
+    }
+    
+    private onBallHitGround(ball: Ball, ground: Ground) {
+        //console.log("hit ground", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
     }
 }

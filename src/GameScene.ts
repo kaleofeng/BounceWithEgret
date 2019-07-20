@@ -5,9 +5,11 @@ class GameScene extends egret.DisplayObjectContainer {
     private p2DebugDraw: p2DebugDraw;
 
     private ground: Ground;
+    private topWall: Wall;
+    private leftWall: Wall;
+    private rightWall: Wall;
     private boxBrick: Brick;
     private circleBrick: Brick;
-    private ball: Ball;
 
     private lastTime: number;
 
@@ -19,7 +21,7 @@ class GameScene extends egret.DisplayObjectContainer {
     private onAddToStage(event: egret.Event) {
         this.setup();
         this.touchEnabled = true;
-        this.addEventListener( egret.TouchEvent.TOUCH_TAP, this.onTouch, this );
+        this.addEventListener( egret.TouchEvent.TOUCH_TAP, this.onTouchTap, this );
     }
 
     private setup() {
@@ -29,9 +31,11 @@ class GameScene extends egret.DisplayObjectContainer {
 
         this.physicsWorld.setup();
         this.createBackground();
+        this.createTopWall();
+        this.createLeftWall();
+        this.createRightWall();
         this.createGround();
-        this.createBoxBrick();
-        this.createCircleBrick();
+        this.createBricks();
 
         // const debugSprite = new egret.Sprite();
         // this.addChild(debugSprite);
@@ -40,17 +44,8 @@ class GameScene extends egret.DisplayObjectContainer {
         egret.startTick(this.tick, this);
     }
 
-    private onTouch(evt: egret.TouchEvent) {
+    private onTouchTap(evt: egret.TouchEvent) {
         this.createBall(evt.stageX, evt.stageY);
-
-        console.log(Math.atan2(30, 30) * 180 / Math.PI);
-        console.log(Math.atan2(30, -30) * 180 / Math.PI);
-        console.log(Math.atan2(-30, -30) * 180 / Math.PI);
-        console.log(Math.atan2(-30, 30) * 180 / Math.PI);
-        console.log(Math.sin(30/180));
-        console.log(Math.sin(150/180));
-        console.log(Math.sin(-150/180));
-        console.log(Math.sin(-30/180));
     }
 
     private tick(timestamp: number): boolean {
@@ -77,54 +72,86 @@ class GameScene extends egret.DisplayObjectContainer {
     }
 
     private createGround() {
-        const options = {
-            position: [this.stage.stageWidth / 2, this.stage.stageHeight - 100 / 2],
-            dimension: [this.stage.stageWidth, 100],
-            color: 0xFF0000,
-            alpha: 1
-        };
+        const position: number[] = [this.stage.stageWidth / 2, this.stage.stageHeight - 100 / 2];
+        const dimension: number[] = [this.stage.stageWidth, 100];
 
-        this.ground = new Ground(options);
+        this.ground = RoleHelper.createGround(position, dimension);
         this.physicsWorld.theWorld().addBody(this.ground.theBody());
         this.addChild(this.ground);
     }
 
-    private createBoxBrick() {
-        const options = {
-            position: [this.stage.stageWidth / 2, this.stage.stageHeight - 200],
-            dimension: [60, 60],
-            color: 0x00FF00,
-            alpha: 0
-        };
+    private createTopWall() {
+        const position: number[] = [this.stage.stageWidth / 2, 20];
+        const dimension: number[] = [this.stage.stageWidth, 40];
 
-        this.boxBrick = new BoxBrick(options);
-        this.physicsWorld.theWorld().addBody(this.boxBrick.theBody());
-        this.addChild(this.boxBrick);
+        this.topWall = RoleHelper.createWall(position, dimension);
+        this.physicsWorld.theWorld().addBody(this.topWall.theBody());
+        this.addChild(this.topWall);
     }
 
-    private createCircleBrick() {
-        const options = {
-            position: [this.stage.stageWidth / 2 - 100, this.stage.stageHeight - 200],
-            radius: 30,
-            color: 0x00FF00,
-            alpha: 0
-        };
+    private createLeftWall() {
+        const position: number[] = [0, this.stage.stageHeight / 2];
+        const dimension: number[] = [80, this.stage.stageHeight];
 
-        this.circleBrick = new CircleBrick(options);
-        this.physicsWorld.theWorld().addBody(this.circleBrick.theBody());
-        this.addChild(this.circleBrick);
+        this.leftWall = RoleHelper.createWall(position, dimension);
+        this.physicsWorld.theWorld().addBody(this.leftWall.theBody());
+        this.addChild(this.leftWall);
+    }
+
+    private createRightWall() {
+        const position: number[] = [this.stage.stageWidth, this.stage.stageHeight / 2];
+        const dimension: number[] = [80, this.stage.stageHeight];
+
+        this.rightWall = RoleHelper.createWall(position, dimension);
+        this.physicsWorld.theWorld().addBody(this.rightWall.theBody());
+        this.addChild(this.rightWall);
+    }
+
+    private createBricks() {
+        const total = 100;
+        const portions = MathHelper.randomPortions(total, 5, 0.1, 0.8);
+        const distance = 80;
+        const sizeMin = 50;
+        const sizeMax = 60;
+
+        let pm = 1;
+        for (let i = 0; i < portions.length; ++i) {
+            const portion = portions[i];
+
+            const initialX = this.stage.stageWidth / 2;
+            const initialY = this.stage.stageHeight - 200;
+            const offset = Math.floor((i + 1) / 2);
+            const offsetX = distance * offset * pm;
+            pm = - pm;
+            const position: number[] = [initialX + offsetX, initialY];
+
+            const size = MathHelper.randomInteger(sizeMin, sizeMax);
+            const dimension: number[] = [size, size];
+
+            const brick = RoleHelper.createBrick(position, dimension);
+            brick.setNumber(portion);
+            this.physicsWorld.theWorld().addBody(brick.theBody());
+            this.addChild(brick);
+        }
     }
 
     private createBall(x: number, y: number) {
-        const options = {
-            position: [x, y]
-        };
+        const xStart = this.stage.stageWidth / 2;
+        const yStart = 100;
 
-        this.ball = new Ball(options);
-        this.physicsWorld.theWorld().addBody(this.ball.theBody());
-        this.addChild(this.ball);
+        const position: number[] = [xStart, yStart];
 
-        this.ball.theBody().mass = 0;
-        this.ball.theBody().applyImpulse([0 , 1000], [0, 0]);
+        const ball = RoleHelper.createBall(position);
+        this.physicsWorld.theWorld().addBody(ball.theBody());
+        this.addChild(ball);
+
+        const xDelta = x - xStart;
+        const yDelta = y - yStart;
+        const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 10000);
+
+        ball.theBody().mass = 0
+        ball.theBody().applyImpulse(impuse, [0, 0]);
+        
+        console.log("born", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
     }
 }

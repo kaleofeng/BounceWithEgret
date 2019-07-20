@@ -48,6 +48,8 @@ class Ball extends egret.Bitmap {
     private createShape() {
         this.shape = new p2.Circle({radius: this.texture.textureWidth / 2});
         this.shape.material = new p2.Material(Constant.BALL_MATERIAL);
+        this.shape.collisionGroup = Constant.BALL_COLLISION_GROUP;
+        this.shape.collisionMask = Constant.BRICK_COLLISION_GROUP | Constant.WALL_COLLISION_GROUP | Constant.GROUND_COLLISION_GROUP;
         this.body.addShape(this.shape);
     }
 }
