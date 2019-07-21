@@ -72,46 +72,54 @@ class GameScene extends egret.DisplayObjectContainer {
     }
 
     private createGround() {
-        const position: number[] = [this.stage.stageWidth / 2, this.stage.stageHeight - 100 / 2];
         const dimension: number[] = [this.stage.stageWidth, 100];
 
-        this.ground = RoleHelper.createGround(position, dimension);
+        this.ground = RoleHelper.createGround(dimension);
         this.physicsWorld.theWorld().addBody(this.ground.theBody());
         this.addChild(this.ground);
+
+        const position: number[] = [this.stage.stageWidth / 2, this.stage.stageHeight - 100 / 2];
+        this.ground.theBody().position = position;
     }
 
     private createTopWall() {
-        const position: number[] = [this.stage.stageWidth / 2, 20];
         const dimension: number[] = [this.stage.stageWidth, 40];
 
-        this.topWall = RoleHelper.createWall(position, dimension);
+        this.topWall = RoleHelper.createWall(dimension);
         this.physicsWorld.theWorld().addBody(this.topWall.theBody());
         this.addChild(this.topWall);
+        
+        const position: number[] = [this.stage.stageWidth / 2, 20];
+        this.topWall.theBody().position = position;
     }
 
     private createLeftWall() {
-        const position: number[] = [0, this.stage.stageHeight / 2];
         const dimension: number[] = [80, this.stage.stageHeight];
 
-        this.leftWall = RoleHelper.createWall(position, dimension);
+        this.leftWall = RoleHelper.createWall(dimension);
         this.physicsWorld.theWorld().addBody(this.leftWall.theBody());
         this.addChild(this.leftWall);
+        
+        const position: number[] = [0, this.stage.stageHeight / 2];
+        this.leftWall.theBody().position = position;
     }
 
     private createRightWall() {
-        const position: number[] = [this.stage.stageWidth, this.stage.stageHeight / 2];
         const dimension: number[] = [80, this.stage.stageHeight];
 
-        this.rightWall = RoleHelper.createWall(position, dimension);
+        this.rightWall = RoleHelper.createWall(dimension);
         this.physicsWorld.theWorld().addBody(this.rightWall.theBody());
         this.addChild(this.rightWall);
+
+        const position: number[] = [this.stage.stageWidth, this.stage.stageHeight / 2];
+        this.rightWall.theBody().position = position;
     }
 
     private createBricks() {
         const total = 100;
         const portions = MathHelper.randomPortions(total, 5, 0.1, 0.8);
-        const distance = 80;
-        const sizeMin = 50;
+        const distance = 100;
+        const sizeMin = 60;
         const sizeMax = 60;
 
         let pm = 1;
@@ -128,27 +136,29 @@ class GameScene extends egret.DisplayObjectContainer {
             const size = MathHelper.randomInteger(sizeMin, sizeMax);
             const dimension: number[] = [size, size];
 
-            const brick = RoleHelper.createBrick(position, dimension);
+            const brick = RoleHelper.createBrick(dimension);
             brick.setNumber(portion);
             this.physicsWorld.theWorld().addBody(brick.theBody());
             this.addChild(brick);
+
+            brick.theBody().position = position;
+            brick.theBody().angle = Math.random() * Math.PI;
         }
     }
 
     private createBall(x: number, y: number) {
-        const xStart = this.stage.stageWidth / 2;
-        const yStart = 100;
-
-        const position: number[] = [xStart, yStart];
-
-        const ball = RoleHelper.createBall(position);
+        const ball = RoleHelper.createBall();
         this.physicsWorld.theWorld().addBody(ball.theBody());
         this.addChild(ball);
 
+        const xStart = this.stage.stageWidth / 2;
+        const yStart = 100;
+
         const xDelta = x - xStart;
         const yDelta = y - yStart;
-        const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 10000);
+        const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 1000);
 
+        ball.theBody().position = [xStart, yStart];
         ball.theBody().mass = 0
         ball.theBody().applyImpulse(impuse, [0, 0]);
         

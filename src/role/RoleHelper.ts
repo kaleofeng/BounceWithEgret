@@ -1,37 +1,29 @@
 
 class RoleHelper {
 
-    public static createBall(position: number[]): Ball {
+    public static createBall(): Ball {
         const options = {
-            position: position,
-            mass: 10
+            mass: 1
         };
 
         const ball = new Ball(options);
         return ball;
     }
     
-    public static createBrick(position: number[], dimension: number[]): Brick {
-        const options = {
-            position: position,
-            mass: 0,
-            dimension: dimension,
-            color: 0x00FF00,
-            alpha: 0
-        };
-
+    public static createBrick(dimension: number[]): Brick {
         const randValue = MathHelper.randomInteger(EBrick.BOX, EBrick.TRIANGLE);
         switch (randValue) {
             case EBrick.CIRCLE:
-                return this.createCircleBrick(position, dimension);
+                return this.createCircleBrick(dimension);
+            case EBrick.TRIANGLE:
+                return this.createTriangleBrick(dimension);
             default:
-                return this.createBoxBrick(position, dimension);
+                return this.createBoxBrick(dimension);
         }
     }
 
-    public static createWall(position: number[], dimension: number[]): Wall {
+    public static createWall(dimension: number[]): Wall {
         const options = {
-            position: position,
             mass: 0,
             dimension: dimension,
             color: 0x000000,
@@ -42,9 +34,8 @@ class RoleHelper {
         return wall;
     }
 
-    public static createGround(position: number[], dimension: number[]): Ground {
+    public static createGround(dimension: number[]): Ground {
         const options = {
-            position: position,
             mass: 0,
             dimension: dimension,
             color: 0xFF0000,
@@ -55,9 +46,8 @@ class RoleHelper {
         return ground;
     }
 
-    private static createBoxBrick(position: number[], dimension: number[]) {
+    private static createBoxBrick(dimension: number[]) {
         const options = {
-            position: position,
             mass: 0,
             dimension: dimension,
             color: 0x00FF00,
@@ -68,16 +58,27 @@ class RoleHelper {
         return brick;
     }
 
-    private static createCircleBrick(position: number[], dimension: number[]) {
+    private static createCircleBrick(dimension: number[]) {
         const options = {
-            position: position,
             mass: 0,
-            radius: dimension[1] / 2,
+            dimension: dimension,
             color: 0x00FF00,
             alpha: 0
         };
 
         const brick = new CircleBrick(options);
+        return brick;
+    }
+
+    private static createTriangleBrick(dimension: number[]) {
+        const options = {
+            mass: 0,
+            dimension: dimension,
+            color: 0x00FF00,
+            alpha: 0
+        };
+
+        const brick = new TriangleBrick(options);
         return brick;
     }
 }

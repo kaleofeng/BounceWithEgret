@@ -18,6 +18,7 @@ class BoxBrick extends Brick {
 
         this.anchorOffsetX = dimension[0] / 2;
         this.anchorOffsetY = dimension[1] / 2;
+        
         this.graphics.lineStyle(thickness, 0x0000FF);
         this.graphics.beginFill(color, alpha);
         this.graphics.drawRect(x, y, width, height);
@@ -28,10 +29,10 @@ class BoxBrick extends Brick {
     protected createShape() {
         const dimension: number[] = OptionHelper.getOptionDimension(this.options);
 
-        this.shape = new p2.Box({width: dimension[0], height: dimension[1]})
-        this.shape.material = new p2.Material(Constant.BRICK_MATERIAL);
-        this.shape.collisionGroup = Constant.BRICK_COLLISION_GROUP;
-        this.shape.collisionMask = Constant.BALL_COLLISION_GROUP;
-        this.body.addShape(this.shape);
+        const shape = new p2.Box({width: dimension[0], height: dimension[1]})
+        shape.material = new p2.Material(Constant.BRICK_MATERIAL);
+        shape.collisionGroup = Constant.BRICK_COLLISION_GROUP;
+        shape.collisionMask = Constant.BALL_COLLISION_GROUP;
+        this.body.addShape(shape);
     }
 }

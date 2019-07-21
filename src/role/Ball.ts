@@ -5,7 +5,6 @@ class Ball extends egret.Bitmap {
     private role: ERole;
 
     private body: p2.Body;
-    private shape: p2.Circle;
 
     constructor(options: any) {
         super();
@@ -25,15 +24,10 @@ class Ball extends egret.Bitmap {
         return this.body;
     }
 
-    public theShape(): p2.Circle {
-        return this.shape;
-    }
-
     private createBody() {
-        const position: number[] = OptionHelper.getOptionPosition(this.options);
         const mass: number = OptionHelper.getOptionMass(this.options);
 
-        this.body = new p2.Body({position: position, mass: mass});
+        this.body = new p2.Body({mass: mass});
         this.body.type = p2.Body.DYNAMIC;
         this.body.userData = this;
     }
@@ -46,10 +40,10 @@ class Ball extends egret.Bitmap {
     }
 
     private createShape() {
-        this.shape = new p2.Circle({radius: this.texture.textureWidth / 2});
-        this.shape.material = new p2.Material(Constant.BALL_MATERIAL);
-        this.shape.collisionGroup = Constant.BALL_COLLISION_GROUP;
-        this.shape.collisionMask = Constant.BRICK_COLLISION_GROUP | Constant.WALL_COLLISION_GROUP | Constant.GROUND_COLLISION_GROUP;
-        this.body.addShape(this.shape);
+        const shape = new p2.Circle({radius: this.texture.textureWidth / 2});
+        shape.material = new p2.Material(Constant.BALL_MATERIAL);
+        shape.collisionGroup = Constant.BALL_COLLISION_GROUP;
+        shape.collisionMask = Constant.BRICK_COLLISION_GROUP | Constant.WALL_COLLISION_GROUP | Constant.GROUND_COLLISION_GROUP;
+        this.body.addShape(shape);
     }
 }

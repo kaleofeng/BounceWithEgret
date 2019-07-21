@@ -1,5 +1,5 @@
 
-class Ground extends egret.Sprite {
+class Wall extends egret.Sprite {
 
     private options: any;
     private role: ERole;
@@ -11,7 +11,7 @@ class Ground extends egret.Sprite {
     constructor(options: any) {
         super();
         this.options = options;
-        this.role = ERole.GROUND;
+        this.role = ERole.WALL;
         this.setup();
     }
 
@@ -45,6 +45,7 @@ class Ground extends egret.Sprite {
 
         this.anchorOffsetX = dimension[0] / 2;
         this.anchorOffsetY = dimension[1] / 2;
+        
         this.graphics.beginFill(color, alpha);
         this.graphics.drawRect(0, 0, dimension[0], dimension[1]);
         this.graphics.endFill();
@@ -55,8 +56,8 @@ class Ground extends egret.Sprite {
         const dimension: number[] = OptionHelper.getOptionDimension(this.options);
 
         this.shape = new p2.Box({width: dimension[0], height: dimension[1]})
-        this.shape.material = new p2.Material(Constant.GROUND_MATERIAL);
-        this.shape.collisionGroup = Constant.GROUND_COLLISION_GROUP;
+        this.shape.material = new p2.Material(Constant.WALL_MATERIAL);
+        this.shape.collisionGroup = Constant.WALL_COLLISION_GROUP;
         this.shape.collisionMask = Constant.BALL_COLLISION_GROUP;
         this.body.addShape(this.shape);
     }
