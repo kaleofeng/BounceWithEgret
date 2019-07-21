@@ -5,6 +5,7 @@ class Ball extends egret.Bitmap {
     private role: ERole;
 
     private body: p2.Body;
+    private state: EBallState;
 
     constructor(options: any) {
         super();
@@ -18,10 +19,20 @@ class Ball extends egret.Bitmap {
         this.createBody();
         this.createDisplay();
         this.createShape();
+
+        this.state = EBallState.BORN;
     }
 
     public theBody(): p2.Body {
         return this.body;
+    }
+
+    public getState(): EBallState {
+        return this.state;
+    }
+
+    public setState(state: EBallState) {
+        this.state = state;
     }
 
     private createBody() {

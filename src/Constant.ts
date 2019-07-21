@@ -12,6 +12,8 @@ class Constant {
     public static GROUND_COLLISION_GROUP = Math.pow(2, 9);
 
     public static BORDER_THICKNESS = 10;
+
+    public static BALL_DEAD_DISTANCE = 100;
 }
 
 enum ERole {
@@ -29,4 +31,13 @@ enum EBrick {
     BOX,
     CIRCLE,
     TRIANGLE
+}
+
+enum EBallState {
+    
+    BORN = 0,
+    DATING,
+    DYING,
+    DEAD,
+    DISAPPEAR,
 }

@@ -8,11 +8,12 @@ class GameScene extends egret.DisplayObjectContainer {
     private topWall: Wall;
     private leftWall: Wall;
     private rightWall: Wall;
-    private boxBrick: Brick;
-    private circleBrick: Brick;
 
-    private lastTime: number;
-
+    private bricks: Brick[] = [];
+    private balls: Ball[] = [];
+    private dyingBalls: Ball[] = [];
+    private deadBalls: Ball[] = [];
+    
     public constructor() {
         super();
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
@@ -26,8 +27,7 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private setup() {
         this.physicsWorld = new PhysicsWorld();
-        this.p2DebugDraw = new p2DebugDraw(this.physicsWorld.theWorld());
-        this.lastTime = 0;
+        //this.p2DebugDraw = new p2DebugDraw(this.physicsWorld);
 
         this.physicsWorld.setup();
         this.createBackground();
@@ -44,23 +44,62 @@ class GameScene extends egret.DisplayObjectContainer {
         egret.startTick(this.tick, this);
     }
 
+    private tick(timestamp: number): boolean {
+        this.physicsWorld.tick(16 / 1000);
+        this.bricksTick();
+        this.ballsTick();
+        return false;
+    }
+
     private onTouchTap(evt: egret.TouchEvent) {
         this.createBall(evt.stageX, evt.stageY);
     }
 
-    private tick(timestamp: number): boolean {
-        const interval = timestamp - this.lastTime;
-        this.lastTime = timestamp;
-        //console.log(timestamp, this.lastTime, interval);
+    private bricksTick() {
 
-        this.physicsWorld.tick(interval / 1000);
-        const bodies = this.physicsWorld.theWorld().bodies;
-        for (const body of bodies) {
-            body.displays[0].x = body.position[0];
-            body.displays[0].y = body.position[1];
-            body.displays[0].rotation = body.angle * 180 / Math.PI;
+    }
+
+    private ballsTick() {
+        for (const ball of this.balls) {
+            if (ball.getState() == EBallState.DYING) {
+                if (ball.x < Constant.BALL_DEAD_DISTANCE || ball.x > this.stage.stageWidth - Constant.BALL_DEAD_DISTANCE) {
+                    this.removeBall(ball);
+                }
+            }
         }
-        return false;
+
+        for (const ball of this.dyingBalls) {
+            const index = this.balls.indexOf(ball);
+            if (index >= 0) {
+                this.balls.splice(index, 1);
+            }
+
+            ball.setState(EBallState.DEAD);
+            ball.x = ball.x < this.stage.stageWidth / 2 ? 40 : this.stage.stageWidth - 40;
+            this.deadBalls.push(ball);
+        }
+        this.dyingBalls.length = 0;
+
+        for (const ball of this.deadBalls) {
+            ball.y -= 10;
+            if (ball.getState() == EBallState.DEAD) {
+                if (ball.y < 40) {
+                    ball.setState(EBallState.DISAPPEAR);
+                    this.removeChild(ball);
+                }
+            }
+        }
+    }
+
+    private addBall(ball: Ball) {
+        this.physicsWorld.addBody(ball.theBody());
+        this.addChild(ball);
+        this.balls.push(ball);
+    }
+
+    private removeBall(ball: Ball) {
+        this.physicsWorld.removeBody(ball.theBody());
+        this.dyingBalls.push(ball);
     }
 
     private createBackground() {
@@ -75,7 +114,7 @@ class GameScene extends egret.DisplayObjectContainer {
         const dimension: number[] = [this.stage.stageWidth, 100];
 
         this.ground = RoleHelper.createGround(dimension);
-        this.physicsWorld.theWorld().addBody(this.ground.theBody());
+        this.physicsWorld.addBody(this.ground.theBody());
         this.addChild(this.ground);
 
         const position: number[] = [this.stage.stageWidth / 2, this.stage.stageHeight - 100 / 2];
@@ -86,7 +125,7 @@ class GameScene extends egret.DisplayObjectContainer {
         const dimension: number[] = [this.stage.stageWidth, 40];
 
         this.topWall = RoleHelper.createWall(dimension);
-        this.physicsWorld.theWorld().addBody(this.topWall.theBody());
+        this.physicsWorld.addBody(this.topWall.theBody());
         this.addChild(this.topWall);
         
         const position: number[] = [this.stage.stageWidth / 2, 20];
@@ -97,7 +136,7 @@ class GameScene extends egret.DisplayObjectContainer {
         const dimension: number[] = [80, this.stage.stageHeight];
 
         this.leftWall = RoleHelper.createWall(dimension);
-        this.physicsWorld.theWorld().addBody(this.leftWall.theBody());
+        this.physicsWorld.addBody(this.leftWall.theBody());
         this.addChild(this.leftWall);
         
         const position: number[] = [0, this.stage.stageHeight / 2];
@@ -108,7 +147,7 @@ class GameScene extends egret.DisplayObjectContainer {
         const dimension: number[] = [80, this.stage.stageHeight];
 
         this.rightWall = RoleHelper.createWall(dimension);
-        this.physicsWorld.theWorld().addBody(this.rightWall.theBody());
+        this.physicsWorld.addBody(this.rightWall.theBody());
         this.addChild(this.rightWall);
 
         const position: number[] = [this.stage.stageWidth, this.stage.stageHeight / 2];
@@ -138,7 +177,7 @@ class GameScene extends egret.DisplayObjectContainer {
 
             const brick = RoleHelper.createBrick(dimension);
             brick.setNumber(portion);
-            this.physicsWorld.theWorld().addBody(brick.theBody());
+            this.physicsWorld.addBody(brick.theBody());
             this.addChild(brick);
 
             brick.theBody().position = position;
@@ -148,8 +187,7 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private createBall(x: number, y: number) {
         const ball = RoleHelper.createBall();
-        this.physicsWorld.theWorld().addBody(ball.theBody());
-        this.addChild(ball);
+        this.addBall(ball);
 
         const xStart = this.stage.stageWidth / 2;
         const yStart = 100;
@@ -161,7 +199,5 @@ class GameScene extends egret.DisplayObjectContainer {
         ball.theBody().position = [xStart, yStart];
         ball.theBody().mass = 0
         ball.theBody().applyImpulse(impuse, [0, 0]);
-        
-        console.log("born", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
     }
 }

@@ -25,15 +25,25 @@ class PhysicsWorld {
         this.world.addContactMaterial(cmAG);
 
         this.world.on("beginContact", this.onBeginContact.bind(this));
-        this.world.on("endContact", this.onEndContact.bind(this));
     }
 
     public tick(dt: number) {
         this.world.step(dt);
+
+        const bodies = this.world.bodies;
+        for (const body of bodies) {
+            body.displays[0].x = body.position[0];
+            body.displays[0].y = body.position[1];
+            body.displays[0].rotation = body.angle * 180 / Math.PI;
+        }
     }
 
-    public theWorld(): p2.World {
-        return this.world;
+    public addBody(body: p2.Body) {
+        this.world.addBody(body);
+    }
+
+    public removeBody(body: p2.Body) {
+        this.world.removeBody(body);
     }
 
     private onBeginContact(evt: any) {
@@ -46,14 +56,12 @@ class PhysicsWorld {
         
         if (role1.role == ERole.BALL) {
             const ball: Ball = <Ball>role1;
-            console.log("hit begin", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1], role2.role);
-            if (ball.theBody().mass == 0) {
+
+            if (ball.getState() <= EBallState.BORN) {
+                ball.setState(EBallState.DATING);
+
                 ball.theBody().mass = 1;
                 ball.theBody().updateMassProperties();
-                // let impulse: number[] = [ball.theBody().velocity[0], ball.theBody().velocity[1]];
-                // p2.vec2.multiply(impulse, impulse, [1, 1]);
-                // ball.theBody().applyImpulse(impulse, [0, 0]);
-                console.log("accelerate", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1], role2.role);
             }
 
             switch (role2.role) {
@@ -72,22 +80,6 @@ class PhysicsWorld {
         }
     }
 
-    
-    private onEndContact(evt: any) {
-        const bodyA: p2.Body = evt.bodyA;
-        const bodyB: p2.Body = evt.bodyB;
-        const body1 = bodyA.userData.role <= bodyB.userData.role ? bodyA : bodyB;
-        const body2 = bodyA.userData.role <= bodyB.userData.role ? bodyB : bodyA;
-        const role1 = body1.userData;
-        const role2 = body2.userData;
-        
-        if (role1.role == ERole.BALL) {
-            const ball: Ball = <Ball>role1;
-
-            console.log("hit end", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1], role2.role);
-        }
-    }
-
     private onBallHitBrick(ball: Ball, brick: Brick) {
         console.log("hit brick", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
     }
@@ -98,5 +90,7 @@ class PhysicsWorld {
     
     private onBallHitGround(ball: Ball, ground: Ground) {
         //console.log("hit ground", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
+        
+        ball.setState(EBallState.DYING);
     }
 }
