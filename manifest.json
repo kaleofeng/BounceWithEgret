@@ -11,6 +11,7 @@
 	"game": [
 		"bin-debug/role/Brick.js",
 		"bin-debug/Platform.js",
+		"bin-debug/GameWorld.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/MathHelper.js",

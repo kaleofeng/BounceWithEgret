@@ -38,7 +38,7 @@ class TriangleBrick extends Brick {
         const rbVertex = [vertices[2][0] + offsetX - halfBorder, vertices[2][1] + offsetY - halfBorder];
 
         this.graphics.lineStyle(Constant.BORDER_THICKNESS, 0x0000FF);
-        this.graphics.beginFill(color, 1);
+        this.graphics.beginFill(color, alpha);
         this.graphics.moveTo(lbVertex[0], lbVertex[1]);
         this.graphics.lineTo(ctVertex[0], ctVertex[1]);
         this.graphics.lineTo(rbVertex[0], rbVertex[1]);
