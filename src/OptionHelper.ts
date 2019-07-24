@@ -1,27 +1,47 @@
 
 class OptionHelper {
     
-    public static getOptionPosition(options: any): number[] {
-        return options.position !== undefined ? options.position : [0, 0];
+    public static position(options: any, defaultValue: number[] = [0, 0]): number[] {
+        return options.position !== undefined ? options.position : defaultValue;
+    }
+        
+    public static dimension(options: any, defaultValue: number[] = [100, 100]): number[] {
+        return options.dimension !== undefined ? options.dimension : defaultValue;
+    }
+
+    public static type(options: any, defaultValue: number = 0): number {
+        return options.type !== undefined ? options.type : defaultValue;
+    }
+
+    public static mass(options: any, defaultValue: number = 1): number {
+        return options.mass !== undefined ? options.mass : defaultValue;
     }
     
-    public static getOptionMass(options: any): number {
-        return options.mass !== undefined ? options.mass : 1;
+    public static width(options: any, defaultValue: number = 100): number {
+        return options.width !== undefined ? options.width : defaultValue;
     }
     
-    public static getOptionColor(options: any): number {
-        return options.color !== undefined ? options.color : 0x000000;
+    public static height(options: any, defaultValue: number = 100): number {
+        return options.height !== undefined ? options.height : defaultValue;
     }
     
-    public static getOptionAlpha(options: any): number {
-        return options.alpha !== undefined ? options.alpha : 1;
+    public static color(options: any, defaultValue: number = 0xFF0000): number {
+        return options.color !== undefined ? options.color : defaultValue;
     }
     
-    public static getOptionDimension(options: any): number[] {
-        return options.dimension !== undefined ? options.dimension : [100, 100];
+    public static alpha(options: any, defaultValue: number = 1): number {
+        return options.alpha !== undefined ? options.alpha : defaultValue;
     }
-    
-    public static getOptionRadius(options: any): number {
-        return options.radius !== undefined ? options.radius : 50;
+
+    public static borderThickness(options: any, defaultValue: number = 10): number {
+        return options.borderThickness !== undefined ? options.borderThickness : defaultValue;
+    }
+
+    public static borderColor(options: any, defaultValue: number = 0x0000FF): number {
+        return options.borderColor !== undefined ? options.borderColor : defaultValue;
+    }
+
+    public static textureName(options: any, defaultValue: string = "TEXTURE"): string {
+        return options.textureName !== undefined ? options.textureName : defaultValue;
     }
 }

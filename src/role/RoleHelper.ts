@@ -3,10 +3,13 @@ class RoleHelper {
 
     public static createBall(): Ball {
         const options = {
-            mass: 1
+            type: p2.Body.DYNAMIC,
+            mass: 1,
+            textureName: "ball_png"
         };
 
-        const ball = new Ball(options);
+        const ball = new Ball();
+        ball.setup(options);
         return ball;
     }
     

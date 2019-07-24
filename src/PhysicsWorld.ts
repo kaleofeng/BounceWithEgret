@@ -54,7 +54,7 @@ class PhysicsWorld {
         const role1 = body1.userData;
         const role2 = body2.userData;
         
-        if (role1.role == ERole.BALL) {
+        if (role1.getType() == ERole.BALL) {
             const ball: Ball = <Ball>role1;
 
             if (ball.getState() <= EBallState.BORN) {

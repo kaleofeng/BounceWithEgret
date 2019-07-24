@@ -6,9 +6,9 @@ class CircleBrick extends Brick {
     }
 
     protected createDisplay() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
-        const color: number = OptionHelper.getOptionColor(this.options);
-        const alpha: number = OptionHelper.getOptionAlpha(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
+        const color: number = OptionHelper.color(this.options);
+        const alpha: number = OptionHelper.alpha(this.options);
 
         const radius = dimension[0] / 2;
         const halfBorder: number = Constant.BORDER_THICKNESS / 2;
@@ -24,7 +24,7 @@ class CircleBrick extends Brick {
     }
     
     protected createShape() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
         
         const radius = dimension[0] / 2;
 

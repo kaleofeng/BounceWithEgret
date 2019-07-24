@@ -24,8 +24,8 @@ class Ground extends egret.Sprite {
     }
 
     private createBody() {
-        const mass: number = OptionHelper.getOptionMass(this.options);
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+        const mass: number = OptionHelper.mass(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
     
         this.body = new p2.Body({mass: mass});
         this.body.type = p2.Body.STATIC;
@@ -39,9 +39,9 @@ class Ground extends egret.Sprite {
     }
 
     private createDisplay() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
-        const color: number = OptionHelper.getOptionColor(this.options);
-        const alpha: number = OptionHelper.getOptionAlpha(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
+        const color: number = OptionHelper.color(this.options);
+        const alpha: number = OptionHelper.alpha(this.options);
 
         const shape = <p2.Convex>this.body.shapes[0];
         const vertices = shape.vertices;

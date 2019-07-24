@@ -53,7 +53,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     private ballsTick() {
         for (const ball of this.balls) {
             if (ball.getState() == EBallState.DYING) {
-                if (ball.x < Constant.BALL_DEAD_DISTANCE || ball.x > this.stageWidth - Constant.BALL_DEAD_DISTANCE) {
+                if (ball.theDisplay().x < Constant.BALL_DEAD_DISTANCE || ball.theDisplay().x > this.stageWidth - Constant.BALL_DEAD_DISTANCE) {
                     this.removeBall(ball);
                 }
             }
@@ -66,17 +66,17 @@ class GameWorld extends egret.DisplayObjectContainer {
             }
 
             ball.setState(EBallState.DEAD);
-            ball.x = ball.x < this.stageWidth / 2 ? 40 : this.stageWidth - 40;
+            ball.theDisplay().x = ball.theDisplay().x < this.stageWidth / 2 ? 40 : this.stageWidth - 40;
             this.deadBalls.push(ball);
         }
         this.dyingBalls.length = 0;
 
         for (const ball of this.deadBalls) {
-            ball.y -= 10;
+            ball.theDisplay().y -= 10;
             if (ball.getState() == EBallState.DEAD) {
-                if (ball.y < 40) {
+                if (ball.theDisplay().y < 40) {
                     ball.setState(EBallState.DISAPPEAR);
-                    this.removeChild(ball);
+                    this.removeChild(ball.theDisplay());
                 }
             }
         }
@@ -84,7 +84,7 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private addBall(ball: Ball) {
         this.physicsWorld.addBody(ball.theBody());
-        this.addChild(ball);
+        this.addChild(ball.theDisplay());
         this.balls.push(ball);
     }
 

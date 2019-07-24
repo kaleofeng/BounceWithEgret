@@ -8,7 +8,7 @@ class TriangleBrick extends Brick {
     protected createBody() {
         super.createBody();
 
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
 
         const lbVertex = [-dimension[0] / 2, dimension[1] / 2];
         const ctVertex = [0, -dimension[1] / 2];
@@ -18,9 +18,9 @@ class TriangleBrick extends Brick {
     }
 
     protected createDisplay() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
-        const color: number = OptionHelper.getOptionColor(this.options);
-        const alpha: number = OptionHelper.getOptionAlpha(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
+        const color: number = OptionHelper.color(this.options);
+        const alpha: number = OptionHelper.alpha(this.options);
 
         const halfBorder: number = Constant.BORDER_THICKNESS / 2;
 

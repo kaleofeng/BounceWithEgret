@@ -37,7 +37,7 @@ class Brick extends egret.Sprite {
     }
 
     protected createBody() {
-        const mass: number = OptionHelper.getOptionMass(this.options);
+        const mass: number = OptionHelper.mass(this.options);
     
         this.body = new p2.Body({mass: mass});
         this.body.type = p2.Body.STATIC;

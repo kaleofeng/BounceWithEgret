@@ -30,8 +30,8 @@ class Wall extends egret.Sprite {
     }
 
     private createBody() {
-        const position: number[] = OptionHelper.getOptionPosition(this.options);
-        const mass: number = OptionHelper.getOptionMass(this.options);
+        const position: number[] = OptionHelper.position(this.options);
+        const mass: number = OptionHelper.mass(this.options);
     
         this.body = new p2.Body({position: position, mass: mass});
         this.body.type = p2.Body.STATIC;
@@ -39,9 +39,9 @@ class Wall extends egret.Sprite {
     }
 
     private createDisplay() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
-        const color: number = OptionHelper.getOptionColor(this.options);
-        const alpha: number = OptionHelper.getOptionAlpha(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
+        const color: number = OptionHelper.color(this.options);
+        const alpha: number = OptionHelper.alpha(this.options);
 
         this.anchorOffsetX = dimension[0] / 2;
         this.anchorOffsetY = dimension[1] / 2;
@@ -53,7 +53,7 @@ class Wall extends egret.Sprite {
     }
     
     private createShape() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
 
         this.shape = new p2.Box({width: dimension[0], height: dimension[1]})
         this.shape.material = new p2.Material(Constant.WALL_MATERIAL);

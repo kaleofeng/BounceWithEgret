@@ -6,9 +6,9 @@ class BoxBrick extends Brick {
     }
 
     protected createDisplay() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
-        const color: number = OptionHelper.getOptionColor(this.options);
-        const alpha: number = OptionHelper.getOptionAlpha(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
+        const color: number = OptionHelper.color(this.options);
+        const alpha: number = OptionHelper.alpha(this.options);
 
         const thickness: number = Constant.BORDER_THICKNESS;
         const x: number = Constant.BORDER_THICKNESS / 2;
@@ -27,7 +27,7 @@ class BoxBrick extends Brick {
     }
     
     protected createShape() {
-        const dimension: number[] = OptionHelper.getOptionDimension(this.options);
+        const dimension: number[] = OptionHelper.dimension(this.options);
 
         const shape = new p2.Box({width: dimension[0], height: dimension[1]})
         shape.material = new p2.Material(Constant.BRICK_MATERIAL);
