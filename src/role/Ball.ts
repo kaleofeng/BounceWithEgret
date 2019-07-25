@@ -15,6 +15,20 @@ class Ball extends Role {
     public setState(state: EBallState) {
         this.state = state;
     }
+
+    public getVelocityPower(): number {
+        return MathHelper.calVelocityPower(this.displayBody.body.velocity);
+    }
+
+    public applyImpulse(impuse: number[]) {
+        this.displayBody.body.applyImpulse(impuse, [0, 0]);
+    }
+
+    public applyImpulseByPower(power: number) {
+        const velocity = this.displayBody.body.velocity;
+        const impuse = MathHelper.calAxisDivide(velocity[0], velocity[1], power);
+        this.displayBody.body.applyImpulse(impuse, [0, 0]);
+    }
     
     protected createDisplayBody() {
         this.displayBody = new ImageCircle(this.options);

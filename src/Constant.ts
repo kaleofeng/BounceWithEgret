@@ -11,7 +11,10 @@ class Constant {
     public static WALL_COLLISION_GROUP = Math.pow(2, 3);
     public static GROUND_COLLISION_GROUP = Math.pow(2, 9);
 
-    public static BALL_DEAD_DISTANCE = 40;
+    public static ROOF_HEIGHT = 40;
+    public static GROUND_HEIGHT = 100;
+    public static WALL_WIDTH = 20;
+    public static TUNNEL_WIDTH = 40;
 }
 
 enum ERole {

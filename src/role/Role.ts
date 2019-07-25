@@ -26,6 +26,12 @@ class Role {
         this.createDisplayBody();
     }
     
+    public sync() {
+        this.displayBody.display.x = this.displayBody.body.position[0];
+        this.displayBody.display.y = this.displayBody.body.position[1];
+        this.displayBody.display.rotation = this.displayBody.body.angle * 180 / Math.PI;
+    }
+    
     protected createDisplayBody() {
     
     }

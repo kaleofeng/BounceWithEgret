@@ -24,6 +24,11 @@ class Brick extends Role {
         this.createText();
     }
 
+    public sync() {
+        super.sync();
+        this.textField.rotation = -this.displayBody.display.rotation;
+    }
+
     protected createDisplayBody() {
         switch (this.style) {
             case EBrick.CIRCLE:
