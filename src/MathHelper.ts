@@ -8,9 +8,9 @@ class MathHelper {
 
     public static randomPortions(total: number, count: number, minRatio: number, maxRatio: number): number[] {
         const portions: number[] = [];
-        const min = Math.floor(total * minRatio);
+        const min = Math.max(Math.floor(total * minRatio), 1);
         total -= min * count;
-        for (let i = 0; i < count - 1; ++i) {
+        for (let i = 0; i < count - 1 && total >= 0; ++i) {
             const max = Math.floor(total * (maxRatio - minRatio));
             const value = this.randomInteger(0, max);
             portions.push(min + value);
@@ -24,7 +24,7 @@ class MathHelper {
         const result = values.slice(0);
         let removeCount = result.length - count;
         while (removeCount-- > 0) {
-            const index = this.randomInteger(0, result.length);
+            const index = this.randomInteger(0, result.length - 1);
             result.splice(index, 1);
         }
         return result;

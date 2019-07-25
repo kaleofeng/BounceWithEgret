@@ -80,18 +80,21 @@ class PhysicsWorld {
     }
 
     private onBallHitBrick(ball: Ball, brick: Brick) {
-        console.log("hit brick", ball.body().id, ball.body().velocity[0], ball.body().velocity[1]);
+        const yOrigin = brick.body().position[1];
+        egret.Tween.get(brick.display()).to({y: yOrigin + 2}, 100).to({y: yOrigin - 2}, 100);
 
         brick.setNumber(brick.getNumber() - 1);
+
+        if (ball.getVelocityPower() < 100) {
+            ball.applyImpulse([500, -500]);
+        }
     }
     
     private onBallHitWall(ball: Ball, wall: Wall) {
-        //console.log("hit wall", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
+    
     }
     
     private onBallHitGround(ball: Ball, ground: Ground) {
-        //console.log("hit ground", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
-        
         ball.setState(EBallState.DYING);
     }
 }

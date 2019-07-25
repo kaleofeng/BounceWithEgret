@@ -1,8 +1,8 @@
 
 class GameWorld extends egret.DisplayObjectContainer {
 
-    private stageWidth: number = 0;
-    private stageHeight: number = 0;
+    private stageWidth: number;
+    private stageHeight: number;
 
     private physicsWorld: PhysicsWorld;
 
@@ -18,7 +18,13 @@ class GameWorld extends egret.DisplayObjectContainer {
     private dyingBalls: Ball[] = [];
     private deadBalls: Ball[] = [];
 
-    private speed: number = 2;
+    private speed: number;
+    private level: number;
+    private brickMaximum: number;
+    private ballMaximum: number;
+    private fired: boolean;
+    private ballNumber: number;
+    private targetPosition: number[];
     
     public constructor() {
         super();
@@ -36,7 +42,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.createLeftWall();
         this.createRightWall();
         this.createGround();
-        this.createBricks();
+        this.init();
     }
 
     public tick(): boolean {
@@ -50,7 +56,35 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public onTouchTap(x: number, y: number) {
-        this.createBall(x, y);
+        if (!this.fired) {
+            this.targetPosition = [x, y];
+            this.fireBall();
+            this.fired = true;
+        }
+    }
+
+    private init() {
+        this.speed = 0;
+        this.level = 0;
+        this.brickMaximum = 100;
+        this.ballMaximum = 10;
+        this.fired = false;
+
+        this.nextLevel();
+    }
+
+    private nextLevel() {
+        this.speed = 2;
+        ++this.level;
+        this.brickMaximum += 10;
+        this.ballMaximum += 1;
+        this.fired = false;
+
+        console.log("nextLevel", this.speed, this.level, this.brickMaximum, this.ballMaximum, this.fired);
+
+        this.moveBricks();
+        this.createBricks();
+        this.ballNumber = this.ballMaximum;
     }
 
     private bricksTick() {
@@ -77,12 +111,6 @@ class GameWorld extends egret.DisplayObjectContainer {
         const TUNNEL_CENTER = Constant.TUNNEL_WIDTH / 2;
 
         for (const ball of this.balls) {
-            if (ball.getState() == EBallState.DATING) {
-                if (ball.getVelocityPower() < 100) {
-                    ball.applyImpulse([500, -500]);
-                }
-            }
-
             if (ball.getState() == EBallState.DYING) {
                 if (ball.display().x < TUNNEL_WIDTH || ball.display().x > this.stageWidth - TUNNEL_WIDTH) {
                     this.removeBall(ball);
@@ -102,6 +130,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         }
         this.dyingBalls.length = 0;
 
+        let disappearBallNumber: number = 0;
         for (const ball of this.deadBalls) {
             ball.display().y -= 10;
             if (ball.getState() == EBallState.DEAD) {
@@ -110,6 +139,33 @@ class GameWorld extends egret.DisplayObjectContainer {
                     this.removeChild(ball.display());
                 }
             }
+            if (ball.getState() == EBallState.DISAPPEAR) {
+                ++disappearBallNumber;
+            }
+        }
+        if (disappearBallNumber == this.deadBalls.length) {
+            this.deadBalls.length = 0;
+        }
+
+        const totalBallNumber = this.ballNumber + this.balls.length + this.dyingBalls.length + this.deadBalls.length;
+        if (totalBallNumber < 1) {
+            this.nextLevel();
+        } else if (this.ballNumber + this.balls.length < this.ballMaximum / 2) {
+            this.speed = 4;
+        }
+    }
+
+    private fireBall() {
+        if (this.ballNumber > 0) {
+            --this.ballNumber;
+            this.createBall();
+            setTimeout(this.fireBall.bind(this), 400 / this.speed);
+        }
+    }
+
+    private moveBricks() {
+        for (const brick of this.bricks) {
+            brick.body().position[1] -= 100;
         }
     }
 
@@ -182,7 +238,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     private createBricks() {
-        const total = 100;
+        const total = this.brickMaximum;
         const count = MathHelper.randomInteger(3, 5);
         const portions = MathHelper.randomPortions(total, count, 0.1, 0.8);
         
@@ -207,15 +263,18 @@ class GameWorld extends egret.DisplayObjectContainer {
         }
     }
 
-    private createBall(x: number, y: number) {
+    private createBall() {
         const ball = RoleHelper.createBall();
         this.addBall(ball);
 
         const xStart = this.stageWidth / 2;
         const yStart = 100;
 
-        const xDelta = x - xStart;
-        const yDelta = y - yStart;
+        const xTarget = this.targetPosition[0];
+        const yTarget = this.targetPosition[1];
+
+        const xDelta = xTarget - xStart;
+        const yDelta = yTarget - yStart;
         const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 1000);
 
         ball.body().position = [xStart, yStart];

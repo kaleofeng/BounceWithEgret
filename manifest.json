@@ -9,23 +9,27 @@
 		"libs/physics/physics.js"
 	],
 	"game": [
+		"bin-debug/role/Role.js",
+		"bin-debug/unit/DisplayBody.js",
 		"bin-debug/role/Brick.js",
-		"bin-debug/Platform.js",
-		"bin-debug/GameWorld.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/MathHelper.js",
 		"bin-debug/OptionHelper.js",
 		"bin-debug/p2DebugDraw.js",
 		"bin-debug/PhysicsWorld.js",
-		"bin-debug/GameScene.js",
+		"bin-debug/Platform.js",
 		"bin-debug/role/Ball.js",
-		"bin-debug/role/BoxBrick.js",
-		"bin-debug/Constant.js",
-		"bin-debug/role/CircleBrick.js",
+		"bin-debug/GameScene.js",
 		"bin-debug/role/Ground.js",
+		"bin-debug/Constant.js",
 		"bin-debug/role/RoleHelper.js",
-		"bin-debug/role/TriangeBrick.js",
-		"bin-debug/role/Wall.js"
+		"bin-debug/role/Wall.js",
+		"bin-debug/GameWorld.js",
+		"bin-debug/unit/GraphicsBox.js",
+		"bin-debug/unit/GraphicsCircle.js",
+		"bin-debug/unit/GraphicsTriangle.js",
+		"bin-debug/unit/ImageBox.js",
+		"bin-debug/unit/ImageCircle.js"
 	]
 }
