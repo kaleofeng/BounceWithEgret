@@ -1,30 +1,13 @@
 
-class Brick extends egret.Sprite {
+class Brick extends Role {
 
-    protected options: any;
-    protected role: ERole;
-
-    protected body: p2.Body;
+    private style: number = 0;
+    protected number: number = 0;
     protected textField : egret.TextField;
 
-    protected number: number = 0;
-
     constructor(options: any) {
-        super();
-        this.options = options;
-        this.role = ERole.BRICK;
-        this.setup();
-    }
-
-    public setup() {
-        this.createBody();
-        this.createDisplay();
-        this.createShape();
-        this.createText();
-    }
-
-    public theBody(): p2.Body {
-        return this.body;
+        super(ERole.BRICK, options);
+        this.style = OptionHelper.style(options);
     }
 
     public getNumber(): number {
@@ -36,20 +19,28 @@ class Brick extends egret.Sprite {
         this.textField.text = this.number.toString(10);
     }
 
-    protected createBody() {
-        const mass: number = OptionHelper.mass(this.options);
-    
-        this.body = new p2.Body({mass: mass});
-        this.body.type = p2.Body.STATIC;
-        this.body.userData = this;
+    public setup() {
+        this.createDisplayBody();
+        this.createText();
     }
 
-    protected createDisplay() {
-    
-    }
-
-    protected createShape() {
-    
+    protected createDisplayBody() {
+        switch (this.style) {
+            case EBrick.CIRCLE:
+                this.displayBody = new GraphicsCircle(this.options);
+                break;
+            case EBrick.TRIANGLE:
+                this.displayBody = new GraphicsTriangle(this.options);
+                break;
+            default:
+                this.displayBody = new GraphicsBox(this.options);
+        }
+        
+        this.displayBody.setup();
+        this.displayBody.body.userData = this;
+        this.displayBody.shape.material = new p2.Material(Constant.BRICK_MATERIAL);
+        this.displayBody.shape.collisionGroup = Constant.BRICK_COLLISION_GROUP;
+        this.displayBody.shape.collisionMask = Constant.BALL_COLLISION_GROUP;
     }
 
     protected createText() {
@@ -65,8 +56,8 @@ class Brick extends egret.Sprite {
         this.textField.height = 40;
         this.textField.anchorOffsetX = this.textField.width / 2;
         this.textField.anchorOffsetY = this.textField.height / 2;
-        this.textField.x = this.width / 2;
-        this.textField.y = this.height / 2;
-        this.addChild(this.textField);
+        this.textField.x = this.display().width / 2;
+        this.textField.y = this.display().height / 2;
+        this.display().addChild(this.textField);
     }
 }

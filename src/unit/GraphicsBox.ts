@@ -32,22 +32,20 @@ class GraphicsBox extends DisplayBody {
         const height: number = this.height - this.borderThickness;
 
         const skin = new egret.Sprite();
-        skin.anchorOffsetX = this.width / 2;
-        skin.anchorOffsetY = this.height / 2;
-        
         skin.graphics.lineStyle(this.borderThickness, this.borderColor);
         skin.graphics.beginFill(this.color, this.alpha);
         skin.graphics.drawRect(x, y, width, height);
         skin.graphics.endFill();
 
-        this.skin = skin;
-        this.body.displays = [this.skin];
+        this.display = new egret.DisplayObjectContainer();
+        this.display.anchorOffsetX = this.width / 2;
+        this.display.anchorOffsetY = this.height / 2;
+        this.display.addChild(skin);
+        this.body.displays = [this.display];
     }
     
     protected createShape() {        
-        const shape = new p2.Box({width: this.width, height: this.height});
-
-        this.shape = shape;
+        this.shape = new p2.Box({width: this.width, height: this.height});
         this.body.addShape(this.shape);
     }
 }

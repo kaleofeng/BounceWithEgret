@@ -7,7 +7,7 @@ class DisplayBody {
     protected height: number;
 
     public body: p2.Body;
-    public skin: egret.DisplayObject;
+    public display: egret.DisplayObjectContainer;
     public shape: p2.Shape;
 
     constructor(options: any) {

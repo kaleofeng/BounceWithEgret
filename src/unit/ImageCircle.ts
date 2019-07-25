@@ -16,20 +16,19 @@ class ImageCircle extends DisplayBody {
     protected createDisplay() {
         const skin = new egret.Bitmap();
         skin.texture = RES.getRes(this.textureName);
-        skin.anchorOffsetX = skin.texture.textureWidth / 2;
-        skin.anchorOffsetY = skin.texture.textureHeight / 2;
 
         this.width = skin.texture.textureWidth;
         this.height = skin.texture.textureHeight;
 
-        this.skin = skin;
-        this.body.displays = [this.skin];
+        this.display = new egret.DisplayObjectContainer();
+        this.display.anchorOffsetX = this.width / 2;
+        this.display.anchorOffsetY = this.height / 2;
+        this.display.addChild(skin);
+        this.body.displays = [this.display];
     }
     
     protected createShape() {
-        const shape = new p2.Circle({radius: this.width / 2});
-
-        this.shape = shape;
+        this.shape = new p2.Circle({radius: this.width / 2});
         this.body.addShape(this.shape);
     }
 }

@@ -8,80 +8,61 @@ class RoleHelper {
             textureName: "ball_png"
         };
 
-        const ball = new Ball();
-        ball.setup(options);
+        const ball = new Ball(options);
+        ball.setup();
         return ball;
     }
     
-    public static createBrick(dimension: number[]): Brick {
-        const randValue = MathHelper.randomInteger(EBrick.BOX, EBrick.TRIANGLE);
-        switch (randValue) {
-            case EBrick.CIRCLE:
-                return this.createCircleBrick(dimension);
-            case EBrick.TRIANGLE:
-                return this.createTriangleBrick(dimension);
-            default:
-                return this.createBoxBrick(dimension);
-        }
+    public static createBrick(width: number, height: number): Brick {
+        const randStyle = MathHelper.randomInteger(EBrick.BOX, EBrick.TRIANGLE);
+        const options = {
+            type: p2.Body.STATIC,
+            mass: 0,
+            width: width,
+            height: height,
+            color: 0x00FF00,
+            alpha: 0,
+            borderThickness: 4,
+            borderColor: 0x0000FF,
+            style: randStyle
+        };
+        
+        const brick = new Brick(options);
+        brick.setup();
+        return brick;
     }
 
-    public static createWall(dimension: number[]): Wall {
+    public static createWall(width: number, height: number): Wall {
         const options = {
+            type: p2.Body.STATIC,
             mass: 0,
-            dimension: dimension,
-            color: 0x000000,
-            alpha: 1
+            width: width,
+            height: height,
+            color: 0x00FF00,
+            alpha: 0,
+            borderThickness: 4,
+            borderColor: 0x0000FF,
         };
 
         const wall = new Wall(options);
+        wall.setup();
         return wall;
     }
 
-    public static createGround(dimension: number[]): Ground {
+    public static createGround(width: number, height: number): Ground {
         const options = {
+            type: p2.Body.STATIC,
             mass: 0,
-            dimension: dimension,
-            color: 0xFF0000,
-            alpha: 1
+            width: width,
+            height: height,
+            color: 0x00FF00,
+            alpha: 1,
+            borderThickness: 4,
+            borderColor: 0x0000FF,
         };
 
         const ground = new Ground(options);
+        ground.setup();
         return ground;
-    }
-
-    private static createBoxBrick(dimension: number[]) {
-        const options = {
-            mass: 0,
-            dimension: dimension,
-            color: 0x00FF00,
-            alpha: 0
-        };
-
-        const brick = new BoxBrick(options);
-        return brick;
-    }
-
-    private static createCircleBrick(dimension: number[]) {
-        const options = {
-            mass: 0,
-            dimension: dimension,
-            color: 0x00FF00,
-            alpha: 0
-        };
-
-        const brick = new CircleBrick(options);
-        return brick;
-    }
-
-    private static createTriangleBrick(dimension: number[]) {
-        const options = {
-            mass: 0,
-            dimension: dimension,
-            color: 0x00FF00,
-            alpha: 0
-        };
-
-        const brick = new TriangleBrick(options);
-        return brick;
     }
 }

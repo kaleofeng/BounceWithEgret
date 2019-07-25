@@ -53,7 +53,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     private ballsTick() {
         for (const ball of this.balls) {
             if (ball.getState() == EBallState.DYING) {
-                if (ball.theDisplay().x < Constant.BALL_DEAD_DISTANCE || ball.theDisplay().x > this.stageWidth - Constant.BALL_DEAD_DISTANCE) {
+                if (ball.display().x < Constant.BALL_DEAD_DISTANCE || ball.display().x > this.stageWidth - Constant.BALL_DEAD_DISTANCE) {
                     this.removeBall(ball);
                 }
             }
@@ -66,30 +66,30 @@ class GameWorld extends egret.DisplayObjectContainer {
             }
 
             ball.setState(EBallState.DEAD);
-            ball.theDisplay().x = ball.theDisplay().x < this.stageWidth / 2 ? 40 : this.stageWidth - 40;
+            ball.display().x = ball.display().x < this.stageWidth / 2 ? 20 : this.stageWidth - 20;
             this.deadBalls.push(ball);
         }
         this.dyingBalls.length = 0;
 
         for (const ball of this.deadBalls) {
-            ball.theDisplay().y -= 10;
+            ball.display().y -= 10;
             if (ball.getState() == EBallState.DEAD) {
-                if (ball.theDisplay().y < 40) {
+                if (ball.display().y < 40) {
                     ball.setState(EBallState.DISAPPEAR);
-                    this.removeChild(ball.theDisplay());
+                    this.removeChild(ball.display());
                 }
             }
         }
     }
 
     private addBall(ball: Ball) {
-        this.physicsWorld.addBody(ball.theBody());
-        this.addChild(ball.theDisplay());
+        this.physicsWorld.addBody(ball.body());
+        this.addChild(ball.display());
         this.balls.push(ball);
     }
 
     private removeBall(ball: Ball) {
-        this.physicsWorld.removeBody(ball.theBody());
+        this.physicsWorld.removeBody(ball.body());
         this.dyingBalls.push(ball);
     }
 
@@ -102,47 +102,39 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     private createGround() {
-        const dimension: number[] = [this.stageWidth, 100];
-
-        this.ground = RoleHelper.createGround(dimension);
-        this.physicsWorld.addBody(this.ground.theBody());
-        this.addChild(this.ground);
+        this.ground = RoleHelper.createGround(this.stageWidth, 100);
+        this.physicsWorld.addBody(this.ground.body());
+        this.addChild(this.ground.display());
 
         const position: number[] = [this.stageWidth / 2, this.stageHeight - 100 / 2];
-        this.ground.theBody().position = position;
+        this.ground.body().position = position;
     }
 
     private createTopWall() {
-        const dimension: number[] = [this.stageWidth, 40];
-
-        this.topWall = RoleHelper.createWall(dimension);
-        this.physicsWorld.addBody(this.topWall.theBody());
-        this.addChild(this.topWall);
+        this.topWall = RoleHelper.createWall(this.stageWidth, 40);
+        this.physicsWorld.addBody(this.topWall.body());
+        this.addChild(this.topWall.display());
         
         const position: number[] = [this.stageWidth / 2, 20];
-        this.topWall.theBody().position = position;
+        this.topWall.body().position = position;
     }
 
     private createLeftWall() {
-        const dimension: number[] = [80, this.stageHeight];
-
-        this.leftWall = RoleHelper.createWall(dimension);
-        this.physicsWorld.addBody(this.leftWall.theBody());
-        this.addChild(this.leftWall);
+        this.leftWall = RoleHelper.createWall(20, this.stageHeight);
+        this.physicsWorld.addBody(this.leftWall.body());
+        this.addChild(this.leftWall.display());
         
-        const position: number[] = [0, this.stageHeight / 2];
-        this.leftWall.theBody().position = position;
+        const position: number[] = [50, this.stageHeight / 2 - 100];
+        this.leftWall.body().position = position;
     }
 
     private createRightWall() {
-        const dimension: number[] = [80, this.stageHeight];
+        this.rightWall = RoleHelper.createWall(20, this.stageHeight);
+        this.physicsWorld.addBody(this.rightWall.body());
+        this.addChild(this.rightWall.display());
 
-        this.rightWall = RoleHelper.createWall(dimension);
-        this.physicsWorld.addBody(this.rightWall.theBody());
-        this.addChild(this.rightWall);
-
-        const position: number[] = [this.stageWidth, this.stageHeight / 2];
-        this.rightWall.theBody().position = position;
+        const position: number[] = [this.stageWidth - 50, this.stageHeight / 2 - 100];
+        this.rightWall.body().position = position;
     }
 
     private createBricks() {
@@ -164,15 +156,14 @@ class GameWorld extends egret.DisplayObjectContainer {
             const position: number[] = [initialX + offsetX, initialY];
 
             const size = MathHelper.randomInteger(sizeMin, sizeMax);
-            const dimension: number[] = [size, size];
 
-            const brick = RoleHelper.createBrick(dimension);
+            const brick = RoleHelper.createBrick(size, size);
             brick.setNumber(portion);
-            this.physicsWorld.addBody(brick.theBody());
-            this.addChild(brick);
+            this.physicsWorld.addBody(brick.body());
+            this.addChild(brick.display());
 
-            brick.theBody().position = position;
-            brick.theBody().angle = Math.random() * Math.PI;
+            brick.body().position = position;
+            brick.body().angle = Math.random() * Math.PI;
         }
     }
 
@@ -187,8 +178,8 @@ class GameWorld extends egret.DisplayObjectContainer {
         const yDelta = y - yStart;
         const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 1000);
 
-        ball.theBody().position = [xStart, yStart];
-        ball.theBody().mass = 0
-        ball.theBody().applyImpulse(impuse, [0, 0]);
+        ball.body().position = [xStart, yStart];
+        ball.body().mass = 0
+        ball.body().applyImpulse(impuse, [0, 0]);
     }
 }

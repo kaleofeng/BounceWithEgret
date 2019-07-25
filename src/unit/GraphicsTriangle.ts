@@ -32,15 +32,12 @@ class GraphicsTriangle extends DisplayBody {
         const offsetX = -vertices[0][0];
         const offsetY = -vertices[1][1];
 
-        const skin = new egret.Sprite();
-        skin.anchorOffsetX = offsetX;
-        skin.anchorOffsetY = offsetY;
-
         const halfBorder: number = this.borderThickness / 2;
         const lbVertex = [vertices[0][0] + offsetX + halfBorder, vertices[0][1] + offsetY - halfBorder];
         const ctVertex = [vertices[1][0] + offsetX,              vertices[1][1] + offsetY + halfBorder];
         const rbVertex = [vertices[2][0] + offsetX - halfBorder, vertices[2][1] + offsetY - halfBorder];
 
+        const skin = new egret.Sprite();
         skin.graphics.lineStyle(this.borderThickness, this.borderColor);
         skin.graphics.beginFill(this.color, this.alpha);
         skin.graphics.moveTo(lbVertex[0], lbVertex[1]);
@@ -49,13 +46,14 @@ class GraphicsTriangle extends DisplayBody {
         skin.graphics.lineTo(lbVertex[0], lbVertex[1]);
         skin.graphics.endFill();
 
-        this.skin = skin;
-        this.body.displays = [this.skin];
+        this.display = new egret.DisplayObjectContainer();
+        this.display.anchorOffsetX = offsetX;
+        this.display.anchorOffsetY = offsetY;
+        this.display.addChild(skin);
+        this.body.displays = [this.display];
     }
     
     protected createShape() {
-        const shape = <p2.Convex>this.body.shapes[0];
-
-        this.shape = shape;
+        this.shape = <p2.Convex>this.body.shapes[0];
     }
 }

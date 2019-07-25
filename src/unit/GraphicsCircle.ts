@@ -30,24 +30,22 @@ class GraphicsCircle extends DisplayBody {
         const halfBorder: number = this.borderThickness / 2;
 
         const skin = new egret.Sprite();
-        skin.anchorOffsetX = radius;
-        skin.anchorOffsetY = radius;
-
         skin.graphics.lineStyle(this.borderThickness, this.borderColor);
         skin.graphics.beginFill(this.color, this.alpha);
-        skin.graphics.drawCircle(skin.anchorOffsetX, skin.anchorOffsetY, radius - halfBorder);
+        skin.graphics.drawCircle(radius, radius, radius - halfBorder);
         skin.graphics.endFill();
 
-        this.skin = skin;
-        this.body.displays = [this.skin];
+        this.display = new egret.DisplayObjectContainer();
+        this.display.anchorOffsetX = radius;
+        this.display.anchorOffsetY = radius;
+        this.display.addChild(skin);
+        this.body.displays = [this.display]; 
     }
     
     protected createShape() {
         const radius = this.width / 2;
 
-        const shape = new p2.Circle({radius: radius});
-
-        this.shape = shape;
+        this.shape = new p2.Circle({radius: radius});
         this.body.addShape(this.shape);
     }
 }

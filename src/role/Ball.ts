@@ -3,13 +3,9 @@ class Ball extends Role {
 
     private state: EBallState;
 
-    constructor() {
-        super(ERole.BALL);
+    constructor(options: any) {
+        super(ERole.BALL, options);
         this.state = EBallState.BORN;
-    }
-
-    public setup(options: any) {
-        this.createDisplayBody(options);
     }
 
     public getState(): EBallState {
@@ -20,8 +16,8 @@ class Ball extends Role {
         this.state = state;
     }
     
-    private createDisplayBody(options: any) {
-        this.displayBody = new ImageCircle(options);
+    protected createDisplayBody() {
+        this.displayBody = new ImageCircle(this.options);
         this.displayBody.setup();
         this.displayBody.body.userData = this;
         this.displayBody.shape.material = new p2.Material(Constant.BALL_MATERIAL);

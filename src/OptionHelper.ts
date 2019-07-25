@@ -33,7 +33,7 @@ class OptionHelper {
         return options.alpha !== undefined ? options.alpha : defaultValue;
     }
 
-    public static borderThickness(options: any, defaultValue: number = 10): number {
+    public static borderThickness(options: any, defaultValue: number = 4): number {
         return options.borderThickness !== undefined ? options.borderThickness : defaultValue;
     }
 
@@ -43,5 +43,9 @@ class OptionHelper {
 
     public static textureName(options: any, defaultValue: string = "TEXTURE"): string {
         return options.textureName !== undefined ? options.textureName : defaultValue;
+    }
+    
+    public static style(options: any, defaultValue: number = 0): number {
+        return options.style !== undefined ? options.style : defaultValue;
     }
 }

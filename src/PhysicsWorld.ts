@@ -60,11 +60,11 @@ class PhysicsWorld {
             if (ball.getState() <= EBallState.BORN) {
                 ball.setState(EBallState.DATING);
 
-                ball.theBody().mass = 1;
-                ball.theBody().updateMassProperties();
+                ball.body().mass = 1;
+                ball.body().updateMassProperties();
             }
 
-            switch (role2.role) {
+            switch (role2.getType()) {
                 case ERole.BRICK:
                     this.onBallHitBrick(ball, <Brick>role2);
                     break
@@ -81,7 +81,7 @@ class PhysicsWorld {
     }
 
     private onBallHitBrick(ball: Ball, brick: Brick) {
-        console.log("hit brick", ball.theBody().id, ball.theBody().velocity[0], ball.theBody().velocity[1]);
+        console.log("hit brick", ball.body().id, ball.body().velocity[0], ball.body().velocity[1]);
     }
     
     private onBallHitWall(ball: Ball, wall: Wall) {
