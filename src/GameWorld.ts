@@ -295,15 +295,15 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private createBricks() {
         const total = this.brickMaximum;
-        const count = MathHelper.randomInteger(3, 5);
+        const count = MathHelper.randomInteger(2, 5);
         const portions = MathHelper.randomPortions(total, count, 0.1, 0.8);
         
         const distance = 100;
-        const posXs = MathHelper.randomValues([120, 220, 320, 420, 520], portions.length);
+        const posXs = MathHelper.randomValues([110, 195, 280, 365, 450, 535], portions.length);
         const posY = this.stageHeight - 200;
         
         const sizeMin = 60;
-        const sizeMax = 60;
+        const sizeMax = 50;
 
         for (let i = 0; i < posXs.length; ++i) {
             const portion = portions[i];
@@ -331,7 +331,7 @@ class GameWorld extends egret.DisplayObjectContainer {
 
         const xDelta = xTarget - xStart;
         const yDelta = yTarget - yStart;
-        const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 1000);
+        const impuse = MathHelper.calAxisDivide(xDelta, yDelta, 750);
 
         ball.body().position = [xStart, yStart];
         ball.body().mass = 0

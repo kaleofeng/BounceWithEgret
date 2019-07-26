@@ -7,6 +7,7 @@ class PhysicsWorld {
         this.world = new p2.World();
         this.world.sleepMode = p2.World.BODY_SLEEPING;
         this.world.gravity = [0, 500];
+        this.world.applyDamping = false;
     }
 
     public setup() {
