@@ -13,6 +13,9 @@ class GameScene extends egret.DisplayObjectContainer {
         this.setup();
         this.touchEnabled = true;
         this.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onTouchTap, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
     }
 
     private setup() {
@@ -34,5 +37,17 @@ class GameScene extends egret.DisplayObjectContainer {
 
     private onTouchTap(evt: egret.TouchEvent) {
         this.gameWorld.onTouchTap(evt.stageX, evt.stageY);
+    }
+    
+    private onTouchBegin(evt: egret.TouchEvent) {
+        this.gameWorld.onTouchBegin(evt.stageX, evt.stageY);
+    }
+    
+    private onTouchMove(evt: egret.TouchEvent) {
+        this.gameWorld.onTouchMove(evt.stageX, evt.stageY);
+    }
+    
+    private onTouchEnd(evt: egret.TouchEvent) {
+        this.gameWorld.onTouchEnd(evt.stageX, evt.stageY);
     }
 }

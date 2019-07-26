@@ -86,7 +86,7 @@ class PhysicsWorld {
         brick.setNumber(brick.getNumber() - 1);
 
         if (ball.getVelocityPower() < 100) {
-            ball.applyImpulse([500, -500]);
+            ball.applyImpulse([250, -500]);
         }
     }
     

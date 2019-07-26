@@ -3,6 +3,8 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private stageWidth: number;
     private stageHeight: number;
+    private gunX: number;
+    private gunY: number;
 
     private physicsWorld: PhysicsWorld;
 
@@ -10,6 +12,9 @@ class GameWorld extends egret.DisplayObjectContainer {
     private roof: Wall;
     private leftWall: Wall;
     private rightWall: Wall;
+    private brickContainer: egret.DisplayObjectContainer;
+    private ballContainer: egret.DisplayObjectContainer;
+    private guideLine: Line;
 
     private bricks: Brick[] = [];
     private dyingBricks: Brick[] = [];
@@ -33,15 +38,20 @@ class GameWorld extends egret.DisplayObjectContainer {
     public setup(stageWidth: number, stageHeight: number) {
         this.stageWidth = stageWidth;
         this.stageHeight = stageHeight;
+        this.gunX = this.stageWidth / 2;
+        this.gunY = 100;
 
         this.physicsWorld = new PhysicsWorld();
         this.physicsWorld.setup();
 
         this.createBackground();
+        this.createGround();
         this.createRoof();
         this.createLeftWall();
         this.createRightWall();
-        this.createGround();
+        this.createBrickContainer();
+        this.createBallContainer();
+        this.createGuideLine();
         this.init();
     }
 
@@ -60,6 +70,25 @@ class GameWorld extends egret.DisplayObjectContainer {
             this.targetPosition = [x, y];
             this.fireBall();
             this.fired = true;
+        }
+    }
+
+    public onTouchBegin(x: number, y: number) {
+        if (!this.fired) {
+            this.guideLine.updateDirection(x, y);
+            this.guideLine.show();
+        }
+    }
+
+    public onTouchMove(x: number, y: number) {
+        if (!this.fired) {
+            this.guideLine.updateDirection(x, y);
+        }
+    }
+
+    public onTouchEnd(x: number, y: number) {
+        if (!this.fired) {
+            this.guideLine.hide();
         }
     }
 
@@ -90,7 +119,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     private bricksTick() {
         for (const brick of this.bricks) {
             if (brick.getNumber() <=  0) {
-                this.removeBrick(brick);
+                this.killBrick(brick);
             }
         }
 
@@ -100,7 +129,7 @@ class GameWorld extends egret.DisplayObjectContainer {
                 this.bricks.splice(index, 1);
             }
             
-            this.removeChild(brick.display());
+            this.removeBrick(brick);
         }
         this.dyingBricks.length = 0;
     }
@@ -113,7 +142,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         for (const ball of this.balls) {
             if (ball.getState() == EBallState.DYING) {
                 if (ball.display().x < TUNNEL_WIDTH || ball.display().x > this.stageWidth - TUNNEL_WIDTH) {
-                    this.removeBall(ball);
+                    this.killBall(ball);
                 }
             }
         }
@@ -136,7 +165,7 @@ class GameWorld extends egret.DisplayObjectContainer {
             if (ball.getState() == EBallState.DEAD) {
                 if (ball.display().y < ROOF_HEIGHT) {
                     ball.setState(EBallState.DISAPPEAR);
-                    this.removeChild(ball.display());
+                    this.removeBall(ball);
                 }
             }
             if (ball.getState() == EBallState.DISAPPEAR) {
@@ -171,24 +200,32 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private addBrick(brick: Brick) {
         this.physicsWorld.addBody(brick.body());
-        this.addChild(brick.display());
+        this.brickContainer.addChild(brick.display());
         this.bricks.push(brick);
     }
 
-    private removeBrick(brick: Brick) {
+    private killBrick(brick: Brick) {
         this.physicsWorld.removeBody(brick.body());
         this.dyingBricks.push(brick);
     }
 
+    private removeBrick(brick: Brick) {
+        this.brickContainer.removeChild(brick.display());
+    }
+
     private addBall(ball: Ball) {
         this.physicsWorld.addBody(ball.body());
-        this.addChild(ball.display());
+        this.ballContainer.addChild(ball.display());
         this.balls.push(ball);
     }
 
-    private removeBall(ball: Ball) {
+    private killBall(ball: Ball) {
         this.physicsWorld.removeBody(ball.body());
         this.dyingBalls.push(ball);
+    }
+
+    private removeBall(ball: Ball) {
+        this.ballContainer.removeChild(ball.display());
     }
 
     private createBackground() {
@@ -237,6 +274,25 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.rightWall.body().position = position;
     }
 
+    private createBrickContainer() {
+        this.brickContainer = new egret.DisplayObjectContainer();
+        this.addChild(this.brickContainer);
+    }
+
+    private createBallContainer() {
+        this.ballContainer = new egret.DisplayObjectContainer();
+        this.addChild(this.ballContainer);
+    }
+
+    private createGuideLine() {
+        this.guideLine = RoleHelper.createLine();
+        this.addChild(this.guideLine);
+
+        this.guideLine.x = this.gunX;
+        this.guideLine.y = this.gunY + 20;
+        this.guideLine.hide();
+    }
+
     private createBricks() {
         const total = this.brickMaximum;
         const count = MathHelper.randomInteger(3, 5);
@@ -267,8 +323,8 @@ class GameWorld extends egret.DisplayObjectContainer {
         const ball = RoleHelper.createBall();
         this.addBall(ball);
 
-        const xStart = this.stageWidth / 2;
-        const yStart = 100;
+        const xStart = this.gunX;
+        const yStart = this.gunY + 20;
 
         const xTarget = this.targetPosition[0];
         const yTarget = this.targetPosition[1];

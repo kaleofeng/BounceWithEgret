@@ -65,4 +65,17 @@ class RoleHelper {
         ground.setup();
         return ground;
     }
+    
+    public static createLine(): Line {
+        const options = {
+            distance: 800,
+            thickness: 4,
+            color: 0x6633FF,
+            gap: 10
+        };
+
+        const line = new Line(options);
+        line.setup();
+        return line;
+    }
 }

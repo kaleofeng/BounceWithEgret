@@ -9,6 +9,14 @@ class OptionHelper {
         return options.dimension !== undefined ? options.dimension : defaultValue;
     }
 
+    public static distance(options: any, defaultValue: number = 100): number {
+        return options.distance !== undefined ? options.distance : defaultValue;
+    }
+
+    public static thickness(options: any, defaultValue: number = 2): number {
+        return options.thickness !== undefined ? options.thickness : defaultValue;
+    }
+
     public static type(options: any, defaultValue: number = 0): number {
         return options.type !== undefined ? options.type : defaultValue;
     }
@@ -47,5 +55,9 @@ class OptionHelper {
     
     public static style(options: any, defaultValue: number = 0): number {
         return options.style !== undefined ? options.style : defaultValue;
+    }
+    
+    public static gap(options: any, defaultValue: number = 10): number {
+        return options.gap !== undefined ? options.gap : defaultValue;
     }
 }

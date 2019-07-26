@@ -30,12 +30,19 @@ class MathHelper {
         return result;
     }
 
-    public static calAxisDivide(x: number, y: number, value: number): number[] {
-        // const p1 = Math.pow(x, 2) + Math.pow(y, 2);
-        // const p2 = Math.pow(value, 2);
-        // const factor = Math.sqrt(p2 / p1);
-        // return [x * factor, y * factor]; 
+    public static angleToRotation(angle: number): number {
+        return angle * 180 / Math.PI;
+    }
 
+    public static rotationToAngle(rotation: number): number {
+        return rotation * Math.PI / 180;
+    }
+
+    public static calAxisAngle(x: number, y: number): number {
+        return Math.atan2(x, y);  
+    }
+
+    public static calAxisDivide(x: number, y: number, value: number): number[] {
         const angle = Math.atan2(x, y);
         return [value * Math.sin(angle), value * Math.cos(angle)];        
     }

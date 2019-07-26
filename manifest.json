@@ -22,6 +22,7 @@
 		"bin-debug/role/Ball.js",
 		"bin-debug/GameScene.js",
 		"bin-debug/role/Ground.js",
+		"bin-debug/role/Line.js",
 		"bin-debug/Constant.js",
 		"bin-debug/role/RoleHelper.js",
 		"bin-debug/role/Wall.js",
