@@ -12,6 +12,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     private roof: Wall;
     private leftWall: Wall;
     private rightWall: Wall;
+    private gun: Gun;
     private brickContainer: egret.DisplayObjectContainer;
     private ballContainer: egret.DisplayObjectContainer;
     private guideLine: Line;
@@ -39,7 +40,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.stageWidth = stageWidth;
         this.stageHeight = stageHeight;
         this.gunX = this.stageWidth / 2;
-        this.gunY = 100;
+        this.gunY = 50;
 
         this.physicsWorld = new PhysicsWorld();
         this.physicsWorld.setup();
@@ -49,6 +50,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.createRoof();
         this.createLeftWall();
         this.createRightWall();
+        this.createGun();
         this.createBrickContainer();
         this.createBallContainer();
         this.createGuideLine();
@@ -75,6 +77,10 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     public onTouchBegin(x: number, y: number) {
         if (!this.fired) {
+            this.gun.updateDirection(x, y);
+
+            const bulletPostion = this.gun.getBulletPostion();
+            this.guideLine.updatePosition(bulletPostion[0], bulletPostion[1]);
             this.guideLine.updateDirection(x, y);
             this.guideLine.show();
         }
@@ -82,6 +88,10 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     public onTouchMove(x: number, y: number) {
         if (!this.fired) {
+            this.gun.updateDirection(x, y);
+            
+            const bulletPostion = this.gun.getBulletPostion();
+            this.guideLine.updatePosition(bulletPostion[0], bulletPostion[1]);
             this.guideLine.updateDirection(x, y);
         }
     }
@@ -114,6 +124,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.moveBricks();
         this.createBricks();
         this.ballNumber = this.ballMaximum;
+        this.gun.updateBulletNumber(this.ballNumber);
     }
 
     private bricksTick() {
@@ -187,6 +198,8 @@ class GameWorld extends egret.DisplayObjectContainer {
     private fireBall() {
         if (this.ballNumber > 0) {
             --this.ballNumber;
+            this.gun.updateBulletNumber(this.ballNumber);
+            this.gun.fire();
             this.createBall();
             setTimeout(this.fireBall.bind(this), 400 / this.speed);
         }
@@ -274,6 +287,17 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.rightWall.body().position = position;
     }
 
+    private createGun() {
+        this.gun = new Gun();
+        this.gun.setup();
+        this.addChild(this.gun);
+
+        this.gun.scaleX = 0.8;
+        this.gun.scaleY = 0.8;
+        this.gun.x = this.gunX;
+        this.gun.y = this.gunY;
+    }
+
     private createBrickContainer() {
         this.brickContainer = new egret.DisplayObjectContainer();
         this.addChild(this.brickContainer);
@@ -288,8 +312,9 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.guideLine = RoleHelper.createLine();
         this.addChild(this.guideLine);
 
-        this.guideLine.x = this.gunX;
-        this.guideLine.y = this.gunY + 20;
+        const bulletPostion = this.gun.getBulletPostion();
+        this.guideLine.x = bulletPostion[0];
+        this.guideLine.y = bulletPostion[1];
         this.guideLine.hide();
     }
 
@@ -323,8 +348,9 @@ class GameWorld extends egret.DisplayObjectContainer {
         const ball = RoleHelper.createBall();
         this.addBall(ball);
 
-        const xStart = this.gunX;
-        const yStart = this.gunY + 20;
+        const bulletPostion = this.gun.getBulletPostion();
+        const xStart = bulletPostion[0];
+        const yStart = bulletPostion[1];
 
         const xTarget = this.targetPosition[0];
         const yTarget = this.targetPosition[1];

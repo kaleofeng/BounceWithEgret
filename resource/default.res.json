@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,ball_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,ball_png,gun_body_png,gun_muzzle_png",
 			"name": "preload"
 		}
 	],
@@ -25,6 +25,16 @@
 			"name": "ball_png",
 			"type": "image",
 			"url": "assets/ball.png"
+		},
+		{
+			"name": "gun_body_png",
+			"type": "image",
+			"url": "assets/gun_body.png"
+		},
+		{
+			"name": "gun_muzzle_png",
+			"type": "image",
+			"url": "assets/gun_muzzle.png"
 		}
 	]
 }

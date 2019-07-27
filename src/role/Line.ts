@@ -26,6 +26,11 @@ class Line extends egret.Sprite {
         this.alpha = 0;
     }
 
+    public updatePosition(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
     public updateDirection(targetX: number, targetY: number) {
         const deltaX = targetX - this.x;
         const deltaY = targetY - this.y;
