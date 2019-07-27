@@ -15,6 +15,9 @@ class Constant {
     public static GROUND_HEIGHT = 100;
     public static WALL_WIDTH = 20;
     public static TUNNEL_WIDTH = 40;
+    
+    public static LINE_HEIGHT = 100;
+    public static DEAD_AGE = 9;
 }
 
 enum ERole {

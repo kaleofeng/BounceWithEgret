@@ -28,6 +28,11 @@ class Gun extends egret.DisplayObjectContainer {
         this.gunMuzzle.rotation = -MathHelper.angleToRotation(this.angle);
     }
 
+    public resetDirection() {
+        this.angle = 0;
+        this.gunMuzzle.rotation = 0;
+    }
+
     public updateBulletNumber(number: number) {
         this.textField.text = number.toString(10);
     }

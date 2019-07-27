@@ -84,7 +84,7 @@ class PhysicsWorld {
         const yOrigin = brick.body().position[1];
         egret.Tween.get(brick.display()).to({y: yOrigin + 2}, 100).to({y: yOrigin - 2}, 100);
 
-        brick.setNumber(brick.getNumber() - 1);
+        brick.decNumber();
 
         if (ball.getVelocityPower() < 100) {
             ball.applyImpulse([250, -500]);

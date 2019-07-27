@@ -2,12 +2,23 @@
 class Brick extends Role {
 
     private style: number = 0;
-    protected number: number = 0;
     protected textField : egret.TextField;
+    protected number: number = 0;
+    protected age: number = 0;
 
     constructor(options: any) {
         super(ERole.BRICK, options);
         this.style = OptionHelper.style(options);
+    }
+
+    public setup() {
+        this.createDisplayBody();
+        this.createText();
+    }
+
+    public sync() {
+        super.sync();
+        this.textField.rotation = -this.displayBody.display.rotation;
     }
 
     public getNumber(): number {
@@ -19,14 +30,21 @@ class Brick extends Role {
         this.textField.text = this.number.toString(10);
     }
 
-    public setup() {
-        this.createDisplayBody();
-        this.createText();
+    public decNumber() {
+        --this.number;
+        this.textField.text = this.number.toString(10);
     }
 
-    public sync() {
-        super.sync();
-        this.textField.rotation = -this.displayBody.display.rotation;
+    public getAge() {
+        return this.age;
+    }
+
+    public setAge(age: number) {
+        this.age = age;
+    }
+
+    public incAge() {
+        ++this.age;
     }
 
     protected createDisplayBody() {

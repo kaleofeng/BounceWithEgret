@@ -105,9 +105,11 @@ class GameWorld extends egret.DisplayObjectContainer {
     private init() {
         this.speed = 0;
         this.level = 0;
-        this.brickMaximum = 100;
+        this.brickMaximum = 50;
         this.ballMaximum = 10;
         this.fired = false;
+
+        console.log("Game init");
 
         this.nextLevel();
     }
@@ -115,21 +117,30 @@ class GameWorld extends egret.DisplayObjectContainer {
     private nextLevel() {
         this.speed = 2;
         ++this.level;
-        this.brickMaximum += 10;
+        this.brickMaximum += 5;
         this.ballMaximum += 1;
         this.fired = false;
 
-        console.log("nextLevel", this.speed, this.level, this.brickMaximum, this.ballMaximum, this.fired);
+        console.log("Game next level", this.speed, this.level, this.brickMaximum, this.ballMaximum, this.fired);
 
-        this.moveBricks();
-        this.createBricks();
         this.ballNumber = this.ballMaximum;
-        this.gun.updateBulletNumber(this.ballNumber);
+        this.growBricks();
+        this.createBricks();
+        this.reloadGun();
+    }
+
+    private gameOver() {
+        console.log("Game over");
     }
 
     private bricksTick() {
         for (const brick of this.bricks) {
-            if (brick.getNumber() <=  0) {
+            if (brick.getAge() >= Constant.DEAD_AGE) {
+                this.gameOver();
+                return;
+            }
+
+            if (brick.getNumber() < 0) {
                 this.killBrick(brick);
             }
         }
@@ -205,9 +216,15 @@ class GameWorld extends egret.DisplayObjectContainer {
         }
     }
 
-    private moveBricks() {
+    private reloadGun() {
+        this.gun.updateBulletNumber(this.ballNumber);
+        this.gun.resetDirection();
+    }
+
+    private growBricks() {
         for (const brick of this.bricks) {
-            brick.body().position[1] -= 100;
+            brick.incAge();
+            brick.body().position[1] -= Constant.LINE_HEIGHT;
         }
     }
 
@@ -337,6 +354,7 @@ class GameWorld extends egret.DisplayObjectContainer {
 
             const brick = RoleHelper.createBrick(size, size);
             brick.setNumber(portion);
+            brick.setAge(1);
             this.addBrick(brick);
 
             brick.body().position = [posX, posY];
