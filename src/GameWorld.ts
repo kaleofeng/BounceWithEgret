@@ -55,6 +55,8 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.createBallContainer();
         this.createGuideLine();
         this.init();
+
+        SoundManager.setup();
     }
 
     public tick(): boolean {

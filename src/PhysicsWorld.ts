@@ -89,6 +89,8 @@ class PhysicsWorld {
         if (ball.getVelocityPower() < 100) {
             ball.applyImpulse([250, -500]);
         }
+        
+        SoundManager.play(SoundManager.HIT);
     }
     
     private onBallHitWall(ball: Ball, wall: Wall) {
@@ -97,5 +99,6 @@ class PhysicsWorld {
     
     private onBallHitGround(ball: Ball, ground: Ground) {
         ball.setState(EBallState.DYING);
+        SoundManager.play(SoundManager.FLOOR);
     }
 }

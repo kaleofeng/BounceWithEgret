@@ -19,6 +19,7 @@ class Gun extends egret.DisplayObjectContainer {
 
     public fire() {
         egret.Tween.get(this.gunMuzzle).to({scaleY: 0.75}, 100).to({scaleY: 1}, 100);
+        SoundManager.play(SoundManager.FIRE);
     }
 
     public updateDirection(targetX: number, targetY: number) {

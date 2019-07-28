@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,ball_png,gun_body_png,gun_muzzle_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,ball_png,gun_body_png,gun_muzzle_png,floor_mp3,hit_mp3,fire_mp3",
 			"name": "preload"
 		}
 	],
@@ -35,6 +35,21 @@
 			"name": "gun_muzzle_png",
 			"type": "image",
 			"url": "assets/gun_muzzle.png"
+		},
+		{
+			"name": "floor_mp3",
+			"type": "sound",
+			"url": "music/floor.mp3"
+		},
+		{
+			"name": "hit_mp3",
+			"type": "sound",
+			"url": "music/hit.mp3"
+		},
+		{
+			"name": "fire_mp3",
+			"type": "sound",
+			"url": "music/fire.mp3"
 		}
 	]
 }
