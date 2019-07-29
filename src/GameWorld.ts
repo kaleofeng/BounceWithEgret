@@ -262,7 +262,7 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private createBackground() {
         const bg: egret.Sprite = new egret.Sprite();
-        bg.graphics.beginFill(0x888888, 1);
+        bg.graphics.beginFill(0x4169E1, 1);
         bg.graphics.drawRect(0, 0, this.stageWidth, this.stageHeight);
         bg.graphics.endFill();
         this.addChild(bg);

@@ -1,6 +1,9 @@
 
 class RoleHelper {
 
+    public static colors: number[] = [0x00F5FF, 0x00CD66, 0xFF0000, 0x1E90FF,
+        0xFFEC8B, 0xFF1493, 0x0000FF, 0xFF6A6A];
+
     public static createBall(): Ball {
         const options = {
             type: p2.Body.DYNAMIC,
@@ -20,10 +23,10 @@ class RoleHelper {
             mass: 0,
             width: width,
             height: height,
-            color: 0x00FF00,
+            color: this.randomColor(),
             alpha: 0,
             borderThickness: 4,
-            borderColor: 0x0000FF,
+            borderColor: this.randomColor(),
             style: randStyle
         };
         
@@ -38,10 +41,10 @@ class RoleHelper {
             mass: 0,
             width: width,
             height: height,
-            color: 0x00FF00,
-            alpha: 0,
-            borderThickness: 4,
-            borderColor: 0x0000FF,
+            color: 0xC1CDCD,
+            alpha: 1,
+            borderThickness: 0,
+            borderColor: 0xC1CDCD,
         };
 
         const wall = new Wall(options);
@@ -55,10 +58,10 @@ class RoleHelper {
             mass: 0,
             width: width,
             height: height,
-            color: 0x00FF00,
+            color: 0x8B795E,
             alpha: 1,
-            borderThickness: 4,
-            borderColor: 0x0000FF,
+            borderThickness: 0,
+            borderColor: 0x8B795E,
         };
 
         const ground = new Ground(options);
@@ -70,12 +73,17 @@ class RoleHelper {
         const options = {
             distance: 800,
             thickness: 4,
-            color: 0x6633FF,
+            color: 0x00FF00,
             gap: 10
         };
 
         const line = new Line(options);
         line.setup();
         return line;
+    }
+
+    public static randomColor() {
+        const index = MathHelper.randomInteger(0, this.colors.length - 1);
+        return this.colors[index];
     }
 }

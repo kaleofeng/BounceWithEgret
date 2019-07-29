@@ -74,7 +74,7 @@ class Brick extends Role {
         this.textField.fontFamily = "KaiTi";
         this.textField.textAlign = egret.HorizontalAlign.CENTER;
         this.textField.verticalAlign = egret.VerticalAlign.MIDDLE;
-        this.textField.border = true;
+        this.textField.border = false;
         this.textField.width = 60;
         this.textField.height = 40;
         this.textField.anchorOffsetX = this.textField.width / 2;

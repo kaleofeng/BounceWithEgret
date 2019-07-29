@@ -2,7 +2,7 @@
 class MathHelper {
 
     public static randomInteger(min: number, max: number): number {
-        const randValue = Math.round(Math.random() * Number.MAX_VALUE) % Math.round(max - min + 1);
+        const randValue = Math.round(Math.random() * (max - min));
         return min + randValue;
     }
 
