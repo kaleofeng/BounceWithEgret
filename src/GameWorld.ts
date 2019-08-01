@@ -142,7 +142,7 @@ class GameWorld extends egret.DisplayObjectContainer {
                 return;
             }
 
-            if (brick.getNumber() < 0) {
+            if (brick.getNumber() <= 0) {
                 this.killBrick(brick);
             }
         }
@@ -227,6 +227,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         for (const brick of this.bricks) {
             brick.incAge();
             brick.body().position[1] -= Constant.LINE_HEIGHT;
+            brick.body().angularVelocity = Math.random() * 0.5;
         }
     }
 
@@ -361,6 +362,7 @@ class GameWorld extends egret.DisplayObjectContainer {
 
             brick.body().position = [posX, posY];
             brick.body().angle = Math.random() * Math.PI;
+            brick.body().angularVelocity = Math.random() * 0.5;
         }
     }
 

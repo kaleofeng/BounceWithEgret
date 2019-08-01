@@ -53,34 +53,52 @@ class PhysicsWorld {
         const body2 = bodyA.userData.getType() <= bodyB.userData.getType() ? bodyB : bodyA;
         const role1 = body1.userData;
         const role2 = body2.userData;
-        
-        if (role1.getType() == ERole.BALL) {
-            const ball: Ball = <Ball>role1;
 
-            if (ball.getState() <= EBallState.BORN) {
-                ball.setState(EBallState.DATING);
-
-                ball.body().mass = 1;
-                ball.body().updateMassProperties();
-            }
-
-            switch (role2.getType()) {
-                case ERole.BRICK:
-                    this.onBallHitBrick(ball, <Brick>role2);
-                    break
-                case ERole.WALL:
-                    this.onBallHitWall(ball, <Wall>role2);
-                    break
-                case ERole.GROUND:
-                    this.onBallHitGround(ball, <Ground>role2);
-                    break
-                default:
-                    console.log("Ball hit unknown role", role2.role);
-            }
+        const role1Type = role1.getType();
+        switch (role1Type) {
+            case ERole.BALL:
+                this.onBallContact(role1, role2);
+                break;
+            case ERole.BRICK:
+                this.onBrickContact(role1, role2);
+                break;
+            default:
+                break;
         }
     }
 
+    private onBallContact(role1: any, role2: any) {
+        const ball: Ball = <Ball>role1;
+
+        if (ball.getState() <= EBallState.BORN) {
+            ball.setState(EBallState.DATING);
+
+            ball.body().mass = 1;
+            ball.body().updateMassProperties();
+        }
+
+        switch (role2.getType()) {
+            case ERole.BRICK:
+                this.onBallHitBrick(ball, <Brick>role2);
+                break
+            case ERole.WALL:
+                this.onBallHitWall(ball, <Wall>role2);
+                break
+            case ERole.GROUND:
+                this.onBallHitGround(ball, <Ground>role2);
+                break
+            default:
+                console.log("Ball hit unknown role", role2.role);
+        }
+    }
+
+    private onBrickContact(role1: any, role2: any) {
+        const brick: Brick = <Brick>role1;
+    }
+
     private onBallHitBrick(ball: Ball, brick: Brick) {
+        brick.body().angularVelocity = 0;
+        
         const yOrigin = brick.body().position[1];
         egret.Tween.get(brick.display()).to({y: yOrigin + 2}, 100).to({y: yOrigin - 2}, 100);
 
