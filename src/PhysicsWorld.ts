@@ -14,6 +14,7 @@ class PhysicsWorld {
         const mA = new p2.Material(Constant.BALL_MATERIAL);
         const mR = new p2.Material(Constant.BRICK_MATERIAL);
         const mW = new p2.Material(Constant.WALL_MATERIAL);
+        const mF = new p2.Material(Constant.BAFFLE_MATERIAL);
         const mG = new p2.Material(Constant.GROUND_MATERIAL);
 
         const cmAR = new p2.ContactMaterial(mA, mR, <p2.ContactMaterialOptions>{restitution: 0.8, friction: 0});
@@ -21,6 +22,9 @@ class PhysicsWorld {
 
         const cmAW = new p2.ContactMaterial(mA, mW, <p2.ContactMaterialOptions>{restitution: 1, friction: 0});
         this.world.addContactMaterial(cmAW);
+
+        const cmAF = new p2.ContactMaterial(mA, mF, <p2.ContactMaterialOptions>{restitution: 1, friction: 0});
+        this.world.addContactMaterial(cmAF);
 
         const cmAG = new p2.ContactMaterial(mA, mG, <p2.ContactMaterialOptions>{restitution: 0, friction: 0});
         this.world.addContactMaterial(cmAG);
@@ -98,7 +102,7 @@ class PhysicsWorld {
 
     private onBallHitBrick(ball: Ball, brick: Brick) {
         brick.body().angularVelocity = 0;
-        
+
         const yOrigin = brick.body().position[1];
         egret.Tween.get(brick.display()).to({y: yOrigin + 2}, 100).to({y: yOrigin - 2}, 100);
 

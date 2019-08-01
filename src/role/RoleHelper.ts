@@ -52,6 +52,23 @@ class RoleHelper {
         return wall;
     }
 
+    public static createBaffle(width: number, height: number): Baffle {
+        const options = {
+            type: p2.Body.STATIC,
+            mass: 0,
+            width: width,
+            height: height,
+            color: this.randomColor(),
+            alpha: 1,
+            borderThickness: 0,
+            borderColor: this.randomColor()
+        };
+        
+        const baffle = new Baffle(options);
+        baffle.setup();
+        return baffle;
+    }
+
     public static createGround(width: number, height: number): Ground {
         const options = {
             type: p2.Body.STATIC,

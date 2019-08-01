@@ -36,6 +36,6 @@ class Ball extends Role {
         this.displayBody.body.userData = this;
         this.displayBody.shape.material = new p2.Material(Constant.BALL_MATERIAL);
         this.displayBody.shape.collisionGroup = Constant.BALL_COLLISION_GROUP;
-        this.displayBody.shape.collisionMask = Constant.BRICK_COLLISION_GROUP | Constant.WALL_COLLISION_GROUP | Constant.GROUND_COLLISION_GROUP;
+        this.displayBody.shape.collisionMask = Constant.BRICK_COLLISION_GROUP | Constant.WALL_COLLISION_GROUP | Constant.BAFFLE_COLLISION_GROUP | Constant.GROUND_COLLISION_GROUP;
     }
 }

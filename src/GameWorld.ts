@@ -15,6 +15,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     private gun: Gun;
     private brickContainer: egret.DisplayObjectContainer;
     private ballContainer: egret.DisplayObjectContainer;
+    private baffleContainer: egret.DisplayObjectContainer;
     private guideLine: Line;
 
     private bricks: Brick[] = [];
@@ -24,6 +25,9 @@ class GameWorld extends egret.DisplayObjectContainer {
     private dyingBalls: Ball[] = [];
     private deadBalls: Ball[] = [];
 
+    private baffles: Baffle[] = [];
+    private baffleLine: egret.Sprite;
+
     private speed: number;
     private level: number;
     private brickMaximum: number;
@@ -31,6 +35,8 @@ class GameWorld extends egret.DisplayObjectContainer {
     private fired: boolean;
     private ballNumber: number;
     private targetPosition: number[];
+    private beginPosition: number[];
+    private endPosition: number[];
     
     public constructor() {
         super();
@@ -53,6 +59,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.createGun();
         this.createBrickContainer();
         this.createBallContainer();
+        this.createBaffleContainer();
         this.createGuideLine();
         this.init();
 
@@ -70,14 +77,17 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public onTouchTap(x: number, y: number) {
+        this.targetPosition = [x, y];
+
         if (!this.fired) {
-            this.targetPosition = [x, y];
             this.fireBall();
             this.fired = true;
         }
     }
 
     public onTouchBegin(x: number, y: number) {
+        this.beginPosition = [x, y];
+
         if (!this.fired) {
             this.gun.updateDirection(x, y);
 
@@ -89,18 +99,32 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public onTouchMove(x: number, y: number) {
+        this.endPosition = [x, y];
+
         if (!this.fired) {
             this.gun.updateDirection(x, y);
             
             const bulletPostion = this.gun.getBulletPostion();
             this.guideLine.updatePosition(bulletPostion[0], bulletPostion[1]);
             this.guideLine.updateDirection(x, y);
+        } else {
+            if (this.isOnDeck(this.beginPosition) && this.isOnDeck(this.endPosition)) {
+                this.clearBaffleLine();
+                this.drawBaffleLine();
+            }
         }
     }
 
     public onTouchEnd(x: number, y: number) {
+        this.endPosition = [x, y];
+
         if (!this.fired) {
             this.guideLine.hide();
+        } else {
+            if (this.isOnDeck(this.beginPosition) && this.isOnDeck(this.endPosition)) {
+                this.clearBaffleLine();
+                this.createBaffle();
+            }
         }
     }
 
@@ -126,9 +150,10 @@ class GameWorld extends egret.DisplayObjectContainer {
         console.log("Game next level", this.speed, this.level, this.brickMaximum, this.ballMaximum, this.fired);
 
         this.ballNumber = this.ballMaximum;
+        this.reloadGun();
         this.growBricks();
         this.createBricks();
-        this.reloadGun();
+        this.clearBaffles();
     }
 
     private gameOver() {
@@ -231,6 +256,21 @@ class GameWorld extends egret.DisplayObjectContainer {
         }
     }
 
+    private clearBaffles() {
+        for (const baffle of this.baffles) {
+            this.removeBaffle(baffle);
+        }
+        this.baffles.length = 0;
+    }
+
+    private isOnDeck(postion: number[]) {
+        const leftX = Constant.TUNNEL_WIDTH + Constant.WALL_WIDTH + Constant.BAFFLE_HEIGHT;
+        const rightX = this.stage.stageWidth - leftX;
+        const topY = Constant.ROOF_HEIGHT + this.gun.height;
+        const bottomY = this.stage.stageHeight - this.ground.display().height - Constant.BAFFLE_HEIGHT;
+        return postion[0] > leftX && postion[0] < rightX && postion[1] > topY && postion[1] < bottomY;
+    }
+
     private addBrick(brick: Brick) {
         this.physicsWorld.addBody(brick.body());
         this.brickContainer.addChild(brick.display());
@@ -259,6 +299,17 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private removeBall(ball: Ball) {
         this.ballContainer.removeChild(ball.display());
+    }
+
+    private addBaffle(baffle: Baffle) {
+        this.physicsWorld.addBody(baffle.body());
+        this.baffleContainer.addChild(baffle.display());
+        this.baffles.push(baffle);
+    }
+
+    private removeBaffle(baffle: Baffle) {
+        this.physicsWorld.removeBody(baffle.body());
+        this.baffleContainer.removeChild(baffle.display());
     }
 
     private createBackground() {
@@ -328,6 +379,11 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.addChild(this.ballContainer);
     }
 
+    private createBaffleContainer() {
+        this.baffleContainer = new egret.DisplayObjectContainer();
+        this.addChild(this.baffleContainer);
+    }
+
     private createGuideLine() {
         this.guideLine = RoleHelper.createLine();
         this.addChild(this.guideLine);
@@ -347,8 +403,8 @@ class GameWorld extends egret.DisplayObjectContainer {
         const posXs = MathHelper.randomValues([110, 195, 280, 365, 450, 535], portions.length);
         const posY = this.stageHeight - 200;
         
-        const sizeMin = 60;
-        const sizeMax = 50;
+        const sizeMin = Constant.BRICK_SIZE_MIN;
+        const sizeMax = Constant.BRICK_SIZE_MAX;
 
         for (let i = 0; i < posXs.length; ++i) {
             const portion = portions[i];
@@ -384,5 +440,33 @@ class GameWorld extends egret.DisplayObjectContainer {
         ball.body().position = [xStart, yStart];
         ball.body().mass = 0
         ball.body().applyImpulse(impuse, [0, 0]);
+    }
+
+    private createBaffle() {
+        const beginPos = this.beginPosition;
+        const endPos = this.endPosition;
+        const centerPos = [(beginPos[0] + endPos[0]) / 2, (beginPos[1] + endPos[1]) / 2];
+
+        const baffle = RoleHelper.createBaffle(Constant.BAFFLE_WIDTH, Constant.BAFFLE_HEIGHT);
+        this.addBaffle(baffle);
+
+        baffle.body().position = centerPos;
+        baffle.body().angle = MathHelper.calAxisAngle(endPos[1] - beginPos[1], endPos[0] - beginPos[0]);
+    }
+
+    private drawBaffleLine() {
+        this.baffleLine = new egret.Sprite;
+        this.baffleLine.graphics.clear();
+        this.baffleLine.graphics.lineStyle(4, 0x00FF00);
+        this.baffleLine.graphics.moveTo(this.beginPosition[0], this.beginPosition[1]);
+        this.baffleLine.graphics.lineTo(this.endPosition[0], this.endPosition[1]);
+        this.addChild(this.baffleLine);
+    }
+
+    private clearBaffleLine() {
+        if (this.baffleLine !== undefined) {
+            this.removeChild(this.baffleLine);
+            this.baffleLine = undefined;
+        }
     }
 }
