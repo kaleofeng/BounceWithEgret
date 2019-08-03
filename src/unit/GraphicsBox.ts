@@ -14,15 +14,13 @@ class GraphicsBox extends DisplayBody {
         this.borderColor = OptionHelper.borderColor(options);
     }
     
+    public anchorRatio(): number[] {
+        return [1 / 2, 1 / 2];
+    }
+
     protected createBody() {
         this.body = new p2.Body({mass: this.mass});
         this.body.type = this.type;
-
-        const lbVertex = [-this.width / 2, this.height / 2];
-        const ctVertex = [0, -this.height / 2];
-        const rbVertex = [this.width / 2, this.height / 2];
-        const path = [lbVertex, ctVertex, rbVertex];
-        this.body.fromPolygon(path);
     }
 
     protected createDisplay() {

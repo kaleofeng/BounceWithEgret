@@ -46,7 +46,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.stageWidth = stageWidth;
         this.stageHeight = stageHeight;
         this.gunX = this.stageWidth / 2;
-        this.gunY = 50;
+        this.gunY = WorldHelper.gunY();
 
         this.physicsWorld = new PhysicsWorld();
         this.physicsWorld.setup();
@@ -184,15 +184,13 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     private ballsTick() {
-        const ROOF_HEIGHT = Constant.ROOF_HEIGHT;
         const TUNNEL_WIDTH = Constant.TUNNEL_WIDTH;
         const TUNNEL_CENTER = Constant.TUNNEL_WIDTH / 2;
 
         for (const ball of this.balls) {
-            if (ball.getState() == EBallState.DYING) {
-                if (ball.display().x < TUNNEL_WIDTH || ball.display().x > this.stageWidth - TUNNEL_WIDTH) {
-                    this.killBall(ball);
-                }
+            if (ball.display().x < TUNNEL_WIDTH || ball.display().x > this.stageWidth - TUNNEL_WIDTH) {
+                ball.setState(EBallState.DYING);
+                this.killBall(ball);
             }
         }
 
@@ -212,7 +210,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         for (const ball of this.deadBalls) {
             ball.display().y -= 10;
             if (ball.getState() == EBallState.DEAD) {
-                if (ball.display().y < ROOF_HEIGHT) {
+                if (ball.display().y < WorldHelper.gunY()) {
                     ball.setState(EBallState.DISAPPEAR);
                     this.removeBall(ball);
                 }
@@ -321,40 +319,40 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     private createGround() {
-        this.ground = RoleHelper.createGround(this.stageWidth, Constant.GROUND_HEIGHT);
+        const groundWidth = this.stageWidth;
+        const groundHeight = this.stageHeight - WorldHelper.groundOffset();
+        this.ground = RoleHelper.createGround(groundWidth, groundHeight);
         this.physicsWorld.addBody(this.ground.body());
         this.addChild(this.ground.display());
 
-        const position: number[] = [this.stageWidth / 2, this.stageHeight - Constant.GROUND_HEIGHT / 2];
+        const position: number[] = [this.stageWidth / 2, this.stageHeight - groundHeight / 3];
         this.ground.body().position = position;
     }
 
     private createRoof() {
-        this.roof = RoleHelper.createWall(this.stageWidth, Constant.ROOF_HEIGHT);
+        this.roof = RoleHelper.createWall(this.stageWidth, WorldHelper.roofHeight());
         this.physicsWorld.addBody(this.roof.body());
         this.addChild(this.roof.display());
         
-        const position: number[] = [this.stageWidth / 2, Constant.ROOF_HEIGHT / 2];
+        const position: number[] = [this.stageWidth / 2, WorldHelper.roofY()];
         this.roof.body().position = position;
     }
 
     private createLeftWall() {
-        this.leftWall = RoleHelper.createWall(Constant.WALL_WIDTH, this.stageHeight);
+        this.leftWall = RoleHelper.createWall(WorldHelper.wallWidth(), WorldHelper.wallHeight());
         this.physicsWorld.addBody(this.leftWall.body());
         this.addChild(this.leftWall.display());
         
-        const posX = Constant.TUNNEL_WIDTH + Constant.WALL_WIDTH / 2;
-        const position: number[] = [posX, this.stageHeight / 2 - 100];
+        const position: number[] = [WorldHelper.wallX(), WorldHelper.wallY()];
         this.leftWall.body().position = position;
     }
 
     private createRightWall() {
-        this.rightWall = RoleHelper.createWall(20, this.stageHeight);
+        this.rightWall = RoleHelper.createWall(WorldHelper.wallWidth(), WorldHelper.wallHeight());
         this.physicsWorld.addBody(this.rightWall.body());
         this.addChild(this.rightWall.display());
 
-        const posX = Constant.TUNNEL_WIDTH + Constant.WALL_WIDTH / 2;
-        const position: number[] = [this.stageWidth - posX, this.stageHeight / 2 - 100];
+        const position: number[] = [this.stageWidth - WorldHelper.wallX(), WorldHelper.wallY()];
         this.rightWall.body().position = position;
     }
 
@@ -399,9 +397,8 @@ class GameWorld extends egret.DisplayObjectContainer {
         const count = MathHelper.randomInteger(2, 5);
         const portions = MathHelper.randomPortions(total, count, 0.1, 0.8);
         
-        const distance = 100;
-        const posXs = MathHelper.randomValues([110, 195, 280, 365, 450, 535], portions.length);
-        const posY = this.stageHeight - 200;
+        const posXs = MathHelper.randomValues(WorldHelper.brickFixedXs(), portions.length);
+        const posY = WorldHelper.brickInitialY();
         
         const sizeMin = Constant.BRICK_SIZE_MIN;
         const sizeMax = Constant.BRICK_SIZE_MAX;

@@ -18,11 +18,15 @@ class GraphicsTriangle extends DisplayBody {
         this.body = new p2.Body({mass: this.mass});
         this.body.type = this.type;
 
-        const lbVertex = [-this.width / 2, this.height / 2];
-        const ctVertex = [0, -this.height / 2];
-        const rbVertex = [this.width / 2, this.height / 2];
+        const lbVertex = [-this.width / 2, this.height / 3];
+        const ctVertex = [0, -this.height * 2 / 3];
+        const rbVertex = [this.width / 2, this.height / 3];
         const path = [lbVertex, ctVertex, rbVertex];
         this.body.fromPolygon(path);
+    }
+
+    public anchorRatio(): number[] {
+        return [1 / 2, 2 / 3];
     }
 
     protected createDisplay() {

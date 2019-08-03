@@ -79,8 +79,10 @@ class Brick extends Role {
         this.textField.height = 40;
         this.textField.anchorOffsetX = this.textField.width / 2;
         this.textField.anchorOffsetY = this.textField.height / 2;
-        this.textField.x = this.display().width / 2;
-        this.textField.y = this.display().height / 2;
+
+        const anchorRatio = this.displayBody.anchorRatio();
+        this.textField.x = this.display().width * anchorRatio[0];
+        this.textField.y = this.display().height * anchorRatio[1];
         this.display().addChild(this.textField);
     }
 }

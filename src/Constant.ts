@@ -13,10 +13,13 @@ class Constant {
     public static BAFFLE_COLLISION_GROUP = Math.pow(2, 4);
     public static GROUND_COLLISION_GROUP = Math.pow(2, 9);
 
-    public static ROOF_HEIGHT = 40;
-    public static GROUND_HEIGHT = 100;
+    public static ROOF_OFFSET = 40;
+    public static ROOF_HEIGHT = 20;
     public static WALL_WIDTH = 20;
     public static TUNNEL_WIDTH = 40;
+    public static GUN_HEIGHT = 120;
+    public static FALL_HEIGHT = 50;
+
     public static BRICK_SIZE_MIN = 50;
     public static BRICK_SIZE_MAX = 60;
 
@@ -24,6 +27,7 @@ class Constant {
     public static BAFFLE_HEIGHT = 20;
     
     public static LINE_HEIGHT = 100;
+    public static LINE_NUMBER = 8;
     public static DEAD_AGE = 9;
 }
 

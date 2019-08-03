@@ -23,6 +23,10 @@ class DisplayBody {
         this.createShape();
     }
 
+    public anchorRatio(): number[] {
+        return [0, 0];
+    }
+
     protected createBody() {
 
     }
