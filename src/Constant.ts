@@ -13,7 +13,10 @@ class Constant {
     public static BAFFLE_COLLISION_GROUP = Math.pow(2, 4);
     public static GROUND_COLLISION_GROUP = Math.pow(2, 9);
 
-    public static ROOF_OFFSET = 40;
+    public static STAGE_WIDTH = 640;
+    public static STAGE_HEIGHT = 1136;
+
+    public static ROOF_OFFSET = 100;
     public static ROOF_HEIGHT = 20;
     public static WALL_WIDTH = 20;
     public static TUNNEL_WIDTH = 40;
@@ -26,7 +29,7 @@ class Constant {
     public static BAFFLE_WIDTH = 60;
     public static BAFFLE_HEIGHT = 20;
     
-    public static LINE_HEIGHT = 100;
+    public static LINE_HEIGHT = 90;
     public static LINE_NUMBER = 8;
     public static DEAD_AGE = 9;
 }

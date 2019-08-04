@@ -2,7 +2,6 @@
 class GameScene extends egret.DisplayObjectContainer {
 
     private gameWorld: GameWorld;
-    private p2DebugDraw: p2DebugDraw;
 
     public constructor() {
         super();
@@ -23,16 +22,11 @@ class GameScene extends egret.DisplayObjectContainer {
         this.gameWorld.setup(this.stage.stageWidth, this.stage.stageHeight);
         this.addChild(this.gameWorld);
 
-        // this.p2DebugDraw = new p2DebugDraw(this.physicsWorld);
-        // const debugSprite = new egret.Sprite();
-        // this.addChild(debugSprite);
-        // this.p2DebugDraw.setSprite(debugSprite);
-
         egret.startTick(this.tick, this);
     }
 
     private tick(timestamp: number): boolean {
-        return this.gameWorld.tick();
+        return this.gameWorld.tick(timestamp);
     }
 
     private onTouchTap(evt: egret.TouchEvent) {

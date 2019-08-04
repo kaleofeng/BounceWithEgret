@@ -120,6 +120,6 @@ class PhysicsWorld {
     }
     
     private onBallHitGround(ball: Ball, ground: Ground) {
-        SoundManager.play(SoundManager.FLOOR);
+        //SoundManager.play(SoundManager.FLOOR);
     }
 }
