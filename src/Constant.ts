@@ -23,7 +23,7 @@ class Constant {
     public static GUN_HEIGHT = 120;
     public static FALL_HEIGHT = 50;
 
-    public static BRICK_SIZE_MIN = 50;
+    public static BRICK_SIZE_MIN = 60;
     public static BRICK_SIZE_MAX = 60;
 
     public static BAFFLE_WIDTH = 60;

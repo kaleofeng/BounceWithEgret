@@ -1,6 +1,9 @@
 
 class GameWorld extends egret.DisplayObjectContainer {
 
+    private lastTimestamp: number = 0;
+    private speedRatio: number = 1;
+
     private gunX: number;
     private gunY: number;
 
@@ -69,9 +72,17 @@ class GameWorld extends egret.DisplayObjectContainer {
     public tick(timestamp: number): boolean {
         console.log("Game tick", timestamp);
 
-        let count = this.speed;
+        if (this.lastTimestamp <= 0) {
+            this.lastTimestamp = timestamp;
+        }
+
+        const interval = timestamp - this.lastTimestamp;
+        this.lastTimestamp = timestamp;
+        this.speedRatio = Math.max(interval / 16, 1);
+
+        let count = Math.floor(this.speed * this.speedRatio);
         while (count-- > 0) {
-            this.physicsWorld.tick(16 / 1000);
+            this.physicsWorld.tick(10 / 1000);
             this.bricksTick();
             this.ballsTick();
         }
@@ -143,7 +154,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     private nextLevel() {
-        this.speed = 2;
+        this.speed = 3;
         ++this.level;
         this.brickMaximum += 5;
         this.ballMaximum += 1;
@@ -230,7 +241,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         if (totalBallNumber < 1) {
             this.nextLevel();
         } else if (this.ballNumber + this.balls.length < this.ballMaximum / 2) {
-            this.speed = 4;
+            this.speed = 6;
         }
     }
 
@@ -240,7 +251,7 @@ class GameWorld extends egret.DisplayObjectContainer {
             this.gun.updateBulletNumber(this.ballNumber);
             this.gun.fire();
             this.createBall();
-            setTimeout(this.fireBall.bind(this), 400 / this.speed);
+            setTimeout(this.fireBall.bind(this), 600 / this.speed);
         }
     }
 
