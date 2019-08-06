@@ -70,7 +70,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public tick(timestamp: number): boolean {
-        console.log("Game tick", timestamp);
+        //console.log("Game tick", timestamp);
 
         if (this.lastTimestamp <= 0) {
             this.lastTimestamp = timestamp;
@@ -90,6 +90,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public onTouchTap(x: number, y: number) {
+        console.log("onTouchTap", x, y);
         this.targetPosition = [x, y];
 
         if (!this.fired) {
@@ -99,6 +100,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public onTouchBegin(x: number, y: number) {
+        console.log("onTouchBegin", x, y);
         this.beginPosition = [x, y];
 
         if (!this.fired) {
@@ -112,6 +114,7 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     public onTouchMove(x: number, y: number) {
+        console.log("onTouchMove", x, y);
         this.endPosition = [x, y];
 
         if (!this.fired) {
@@ -121,21 +124,22 @@ class GameWorld extends egret.DisplayObjectContainer {
             this.guideLine.updatePosition(bulletPostion[0], bulletPostion[1]);
             this.guideLine.updateDirection(x, y);
         } else {
+            this.clearBaffleLine();
             if (this.isOnDeck(this.beginPosition) && this.isOnDeck(this.endPosition)) {
-                this.clearBaffleLine();
                 this.drawBaffleLine();
             }
         }
     }
 
     public onTouchEnd(x: number, y: number) {
+        console.log("onTouchEnd", x, y);
         this.endPosition = [x, y];
 
         if (!this.fired) {
             this.guideLine.hide();
         } else {
+            this.clearBaffleLine();
             if (this.isOnDeck(this.beginPosition) && this.isOnDeck(this.endPosition)) {
-                this.clearBaffleLine();
                 this.createBaffle();
             }
         }
@@ -279,7 +283,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         const leftX = WorldHelper.tunnelWidth() + WorldHelper.wallWidth() + WorldHelper.baffleWidth();
         const rightX = WorldHelper.stageWidth() - leftX;
         const topY = WorldHelper.roofHeight() + this.gun.height;
-        const bottomY = WorldHelper.stageHeight() - this.ground.display().height - WorldHelper.baffleHeight();
+        const bottomY = WorldHelper.stageHeight() - this.ground.display().height - WorldHelper.baffleWidth();
         return postion[0] > leftX && postion[0] < rightX && postion[1] > topY && postion[1] < bottomY;
     }
 
@@ -456,17 +460,23 @@ class GameWorld extends egret.DisplayObjectContainer {
     private createBaffle() {
         const beginPos = this.beginPosition;
         const endPos = this.endPosition;
-        const centerPos = [(beginPos[0] + endPos[0]) / 2, (beginPos[1] + endPos[1]) / 2];
+        const angle = MathHelper.calAxisAngle(endPos[0] - beginPos[0], endPos[1] - beginPos[1]);
+
+        const baffleWidth = WorldHelper.baffleWidth();
+        const baffleHeight = WorldHelper.baffleHeight();
+        const offsetX = baffleHeight * Math.sin(angle) / 2;
+        const offsetY = baffleHeight * Math.cos(angle) / 2;
+        const centerPos = [beginPos[0] + offsetX, beginPos[1] + offsetY];
 
         const baffle = RoleHelper.createBaffle(WorldHelper.baffleWidth(), WorldHelper.baffleHeight());
         this.addBaffle(baffle);
 
         baffle.body().position = centerPos;
-        baffle.body().angle = MathHelper.calAxisAngle(endPos[1] - beginPos[1], endPos[0] - beginPos[0]);
+        baffle.body().angle = -angle;
     }
 
     private drawBaffleLine() {
-        this.baffleLine = new egret.Sprite;
+        this.baffleLine = new egret.Sprite();
         this.baffleLine.graphics.clear();
         this.baffleLine.graphics.lineStyle(4, 0x00FF00);
         this.baffleLine.graphics.moveTo(this.beginPosition[0], this.beginPosition[1]);
