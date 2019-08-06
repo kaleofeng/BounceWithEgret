@@ -9,15 +9,15 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     private physicsWorld: PhysicsWorld;
 
-    private ground: Ground;
-    private roof: Wall;
-    private leftWall: Wall;
-    private rightWall: Wall;
-    private gun: Gun;
+    public ground: Ground;
+    public roof: Wall;
+    public leftWall: Wall;
+    public rightWall: Wall;
+    public gun: Gun;
     private brickContainer: egret.DisplayObjectContainer;
     private ballContainer: egret.DisplayObjectContainer;
     private baffleContainer: egret.DisplayObjectContainer;
-    private guideLine: Line;
+    public guideLine: Line;
 
     private bricks: Brick[] = [];
     private dyingBricks: Brick[] = [];
@@ -27,17 +27,14 @@ class GameWorld extends egret.DisplayObjectContainer {
     private deadBalls: Ball[] = [];
 
     private baffles: Baffle[] = [];
-    private baffleLine: egret.Sprite;
 
+    private step: Step;
     private speed: number;
     private level: number;
     private brickMaximum: number;
     private ballMaximum: number;
-    private fired: boolean;
     private ballNumber: number;
     private targetPosition: number[];
-    private beginPosition: number[];
-    private endPosition: number[];
     
     public constructor() {
         super();
@@ -89,68 +86,44 @@ class GameWorld extends egret.DisplayObjectContainer {
         return false;
     }
 
-    public onTouchTap(x: number, y: number) {
-        console.log("onTouchTap", x, y);
-        this.targetPosition = [x, y];
-
-        if (!this.fired) {
-            this.fireBall();
-            this.fired = true;
-        }
-    }
-
     public onTouchBegin(x: number, y: number) {
-        console.log("onTouchBegin", x, y);
-        this.beginPosition = [x, y];
-
-        if (!this.fired) {
-            this.gun.updateDirection(x, y);
-
-            const bulletPostion = this.gun.getBulletPostion();
-            this.guideLine.updatePosition(bulletPostion[0], bulletPostion[1]);
-            this.guideLine.updateDirection(x, y);
-            this.guideLine.show();
-        }
+        this.step.onTouchBegin(x, y);
     }
 
     public onTouchMove(x: number, y: number) {
-        console.log("onTouchMove", x, y);
-        this.endPosition = [x, y];
-
-        if (!this.fired) {
-            this.gun.updateDirection(x, y);
-            
-            const bulletPostion = this.gun.getBulletPostion();
-            this.guideLine.updatePosition(bulletPostion[0], bulletPostion[1]);
-            this.guideLine.updateDirection(x, y);
-        } else {
-            this.clearBaffleLine();
-            if (this.isOnDeck(this.beginPosition) && this.isOnDeck(this.endPosition)) {
-                this.drawBaffleLine();
-            }
-        }
+        this.step.onTouchMove(x, y);
     }
 
     public onTouchEnd(x: number, y: number) {
-        console.log("onTouchEnd", x, y);
-        this.endPosition = [x, y];
+        this.step.onTouchEnd(x, y);
+    }
 
-        if (!this.fired) {
-            this.guideLine.hide();
-        } else {
-            this.clearBaffleLine();
-            if (this.isOnDeck(this.beginPosition) && this.isOnDeck(this.endPosition)) {
-                this.createBaffle();
-            }
+    public onTouchTap(x: number, y: number) {
+        this.targetPosition = [x, y];
+        this.step.onTouchTap(x, y);
+    }
+
+    public switchStep(step: Step) {
+        this.step = step;
+        this.step.reset(this);
+    }
+
+    public fireBall() {
+        if (this.ballNumber > 0) {
+            --this.ballNumber;
+            this.gun.updateBulletNumber(this.ballNumber);
+            this.gun.fire();
+            this.createBall();
+            setTimeout(this.fireBall.bind(this), 600 / this.speed);
         }
     }
 
     private init() {
+        this.switchStep(StepFire.Instance());
         this.speed = 0;
         this.level = 0;
         this.brickMaximum = 50;
         this.ballMaximum = 10;
-        this.fired = false;
 
         console.log("Game init");
 
@@ -158,13 +131,13 @@ class GameWorld extends egret.DisplayObjectContainer {
     }
 
     private nextLevel() {
+        this.switchStep(StepFire.Instance());
         this.speed = 3;
         ++this.level;
         this.brickMaximum += 5;
         this.ballMaximum += 1;
-        this.fired = false;
 
-        console.log("Game next level", this.speed, this.level, this.brickMaximum, this.ballMaximum, this.fired);
+        console.log("Game next level", this.speed, this.level, this.brickMaximum, this.ballMaximum);
 
         this.ballNumber = this.ballMaximum;
         this.reloadGun();
@@ -249,16 +222,6 @@ class GameWorld extends egret.DisplayObjectContainer {
         }
     }
 
-    private fireBall() {
-        if (this.ballNumber > 0) {
-            --this.ballNumber;
-            this.gun.updateBulletNumber(this.ballNumber);
-            this.gun.fire();
-            this.createBall();
-            setTimeout(this.fireBall.bind(this), 600 / this.speed);
-        }
-    }
-
     private reloadGun() {
         this.gun.updateBulletNumber(this.ballNumber);
         this.gun.resetDirection();
@@ -277,14 +240,6 @@ class GameWorld extends egret.DisplayObjectContainer {
             this.removeBaffle(baffle);
         }
         this.baffles.length = 0;
-    }
-
-    private isOnDeck(postion: number[]) {
-        const leftX = WorldHelper.tunnelWidth() + WorldHelper.wallWidth() + WorldHelper.baffleWidth();
-        const rightX = WorldHelper.stageWidth() - leftX;
-        const topY = WorldHelper.roofHeight() + this.gun.height;
-        const bottomY = WorldHelper.stageHeight() - this.ground.display().height - WorldHelper.baffleWidth();
-        return postion[0] > leftX && postion[0] < rightX && postion[1] > topY && postion[1] < bottomY;
     }
 
     private addBrick(brick: Brick) {
@@ -317,7 +272,7 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.ballContainer.removeChild(ball.display());
     }
 
-    private addBaffle(baffle: Baffle) {
+    public addBaffle(baffle: Baffle) {
         this.physicsWorld.addBody(baffle.body());
         this.baffleContainer.addChild(baffle.display());
         this.baffles.push(baffle);
@@ -455,39 +410,5 @@ class GameWorld extends egret.DisplayObjectContainer {
         ball.body().position = [xStart, yStart];
         ball.body().mass = 0
         ball.body().applyImpulse(impuse, [0, 0]);
-    }
-
-    private createBaffle() {
-        const beginPos = this.beginPosition;
-        const endPos = this.endPosition;
-        const angle = MathHelper.calAxisAngle(endPos[0] - beginPos[0], endPos[1] - beginPos[1]);
-
-        const baffleWidth = WorldHelper.baffleWidth();
-        const baffleHeight = WorldHelper.baffleHeight();
-        const offsetX = baffleHeight * Math.sin(angle) / 2;
-        const offsetY = baffleHeight * Math.cos(angle) / 2;
-        const centerPos = [beginPos[0] + offsetX, beginPos[1] + offsetY];
-
-        const baffle = RoleHelper.createBaffle(WorldHelper.baffleWidth(), WorldHelper.baffleHeight());
-        this.addBaffle(baffle);
-
-        baffle.body().position = centerPos;
-        baffle.body().angle = -angle;
-    }
-
-    private drawBaffleLine() {
-        this.baffleLine = new egret.Sprite();
-        this.baffleLine.graphics.clear();
-        this.baffleLine.graphics.lineStyle(4, 0x00FF00);
-        this.baffleLine.graphics.moveTo(this.beginPosition[0], this.beginPosition[1]);
-        this.baffleLine.graphics.lineTo(this.endPosition[0], this.endPosition[1]);
-        this.addChild(this.baffleLine);
-    }
-
-    private clearBaffleLine() {
-        if (this.baffleLine !== undefined) {
-            this.removeChild(this.baffleLine);
-            this.baffleLine = undefined;
-        }
     }
 }

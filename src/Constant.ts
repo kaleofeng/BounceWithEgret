@@ -26,12 +26,19 @@ class Constant {
     public static BRICK_SIZE_MIN = 60;
     public static BRICK_SIZE_MAX = 60;
 
-    public static BAFFLE_WIDTH = 60;
-    public static BAFFLE_HEIGHT = 20;
+    public static BAFFLE_WIDTH = 10;
+    public static BAFFLE_HEIGHT = 120;
     
     public static LINE_HEIGHT = 90;
     public static LINE_NUMBER = 8;
     public static DEAD_AGE = 9;
+}
+
+enum EStep {
+
+    FIRE = 0,
+    BAFFLE,
+    NOTHING,
 }
 
 enum ERole {
