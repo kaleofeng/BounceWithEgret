@@ -9,10 +9,10 @@
 		"libs/physics/physics.js"
 	],
 	"game": [
+		"bin-debug/Constant.js",
 		"bin-debug/role/Role.js",
+		"bin-debug/step/Step.js",
 		"bin-debug/unit/DisplayBody.js",
-		"bin-debug/role/Ball.js",
-		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/MathHelper.js",
 		"bin-debug/OptionHelper.js",
@@ -22,19 +22,23 @@
 		"bin-debug/SoundManager.js",
 		"bin-debug/WorldHelper.js",
 		"bin-debug/role/Baffle.js",
-		"bin-debug/GameScene.js",
+		"bin-debug/role/Ball.js",
 		"bin-debug/role/Brick.js",
-		"bin-debug/role/Ground.js",
+		"bin-debug/GameScene.js",
 		"bin-debug/role/Gun.js",
 		"bin-debug/role/Line.js",
-		"bin-debug/Constant.js",
+		"bin-debug/unit/ImageCircle.js",
 		"bin-debug/role/RoleHelper.js",
 		"bin-debug/role/Wall.js",
 		"bin-debug/GameWorld.js",
+		"bin-debug/step/StepBaffle.js",
+		"bin-debug/step/StepFire.js",
+		"bin-debug/step/StepNothing.js",
+		"bin-debug/LoadingUI.js",
 		"bin-debug/unit/GraphicsBox.js",
 		"bin-debug/unit/GraphicsCircle.js",
 		"bin-debug/unit/GraphicsTriangle.js",
 		"bin-debug/unit/ImageBox.js",
-		"bin-debug/unit/ImageCircle.js"
+		"bin-debug/role/Ground.js"
 	]
 }
