@@ -31,7 +31,8 @@ class WorldHelper {
     }
 
     public static roofWidth(): number {
-        return this.stageWidth();
+        const result = this.stageWidth();
+        return this.adaptWidth(result);
     }
 
     public static roofHeight(): number {
@@ -40,11 +41,22 @@ class WorldHelper {
     }
 
     public static roofX(): number {
-        return this.stageWidth() / 2;
+        const result = this.stageWidth() / 2;
+        return this.adaptWidth(result);
     }
 
     public static roofY(): number {
         const result = Constant.ROOF_OFFSET + this.roofHeight() / 2;
+        return this.adaptHeight(result);
+    }
+
+    public static scoreBoardX(): number {
+        const result = this.stageWidth() / 2;
+        return this.adaptWidth(result);
+    }
+
+    public static scoreBoardY(): number {
+        const result = Constant.ROOF_OFFSET / 2;
         return this.adaptHeight(result);
     }
 

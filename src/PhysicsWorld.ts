@@ -1,9 +1,11 @@
 
 class PhysicsWorld {
 
+    private game: GameWorld;
     private world: p2.World;
 
-    constructor() {
+    constructor(game: GameWorld) {
+        this.game = game;
         this.world = new p2.World();
         this.world.sleepMode = p2.World.BODY_SLEEPING;
         this.world.gravity = [0, 500];
@@ -107,6 +109,7 @@ class PhysicsWorld {
         egret.Tween.get(brick.display()).to({y: yOrigin + 2}, 100).to({y: yOrigin - 2}, 100);
 
         brick.decNumber();
+        this.game.incScore();
 
         if (ball.getVelocityPower() < 100) {
             ball.applyImpulse([250, -500]);

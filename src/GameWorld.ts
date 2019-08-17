@@ -11,6 +11,7 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     public ground: Ground;
     public roof: Wall;
+    private scoreBoard: egret.TextField;
     public leftWall: Wall;
     public rightWall: Wall;
     public gun: Gun;
@@ -35,6 +36,8 @@ class GameWorld extends egret.DisplayObjectContainer {
     private ballMaximum: number;
     private ballNumber: number;
     private targetPosition: number[];
+
+    private score: number = 0;
     
     public constructor() {
         super();
@@ -48,12 +51,13 @@ class GameWorld extends egret.DisplayObjectContainer {
         this.gunX = WorldHelper.gunX();
         this.gunY = WorldHelper.gunY();
 
-        this.physicsWorld = new PhysicsWorld();
+        this.physicsWorld = new PhysicsWorld(this);
         this.physicsWorld.setup();
 
         this.createBackground();
         this.createGround();
         this.createRoof();
+        this.createScoreBoard();
         this.createLeftWall();
         this.createRightWall();
         this.createGun();
@@ -116,6 +120,11 @@ class GameWorld extends egret.DisplayObjectContainer {
             this.createBall();
             setTimeout(this.fireBall.bind(this), 600 / this.speed);
         }
+    }
+
+    public incScore() {
+        ++this.score;
+        this.scoreBoard.text = this.score.toString(10);
     }
 
     private init() {
@@ -309,6 +318,25 @@ class GameWorld extends egret.DisplayObjectContainer {
         
         const position: number[] = [WorldHelper.stageWidth() / 2, WorldHelper.roofY()];
         this.roof.body().position = position;
+    }
+
+    protected createScoreBoard() {
+        this.scoreBoard = new egret.TextField();
+        this.scoreBoard.text = "";
+        this.scoreBoard.size = 28;
+        this.scoreBoard.textColor = 0xFFFFFF;
+        this.scoreBoard.fontFamily = "KaiTi";
+        this.scoreBoard.textAlign = egret.HorizontalAlign.CENTER;
+        this.scoreBoard.verticalAlign = egret.VerticalAlign.MIDDLE;
+        this.scoreBoard.border = false;
+        this.scoreBoard.width = 160;
+        this.scoreBoard.height = 40;
+        this.addChild(this.scoreBoard);
+
+        this.scoreBoard.anchorOffsetX = this.scoreBoard.width / 2;
+        this.scoreBoard.anchorOffsetY = this.scoreBoard.height / 2;
+        this.scoreBoard.x = WorldHelper.scoreBoardX();
+        this.scoreBoard.y = WorldHelper.scoreBoardY();
     }
 
     private createLeftWall() {
