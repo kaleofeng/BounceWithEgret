@@ -322,9 +322,9 @@ class GameWorld extends egret.DisplayObjectContainer {
 
     protected createScoreBoard() {
         this.scoreBoard = new egret.TextField();
-        this.scoreBoard.text = "";
-        this.scoreBoard.size = 28;
-        this.scoreBoard.textColor = 0xFFFFFF;
+        this.scoreBoard.text = "0";
+        this.scoreBoard.size = 36;
+        this.scoreBoard.textColor = 0x00FFCC;
         this.scoreBoard.fontFamily = "KaiTi";
         this.scoreBoard.textAlign = egret.HorizontalAlign.CENTER;
         this.scoreBoard.verticalAlign = egret.VerticalAlign.MIDDLE;
