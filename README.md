@@ -1,3 +1,3 @@
-# Bounce
+# Bounce Game
 
-Bounce ball game
+Bounce Ball Game with Egret
